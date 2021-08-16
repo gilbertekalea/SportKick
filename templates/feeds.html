@@ -1,0 +1,75 @@
+{% extends "layout.html"%}
+<!DOCTYPE html>
+<html lang="en">
+<meta charset='utf-8'>
+<meta name='description' content='users posts'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Posts</title>
+</head>
+
+{% block body %}
+
+<body>
+    <div class="container">
+        <div class="row">
+            <p class="fs-3 g-3 font-monospace">Recent post from, <span
+                    class="fs-3 font-monospace fw-lighter text-info"><u>@{{session.firstname.capitalize()}}</u></span>
+            </p>
+            <hr>
+            <ul class="nav fs-5">
+                <li class="nav-item">
+                    <a class="nav-link active font-monospace fw-bold" aria-current="page" href="/logout">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active font-monospace fw-bold" href="/register">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active font-monospace fw-bold" href="/posts">Create Post</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active font-monospace fw-bold" href="/registrants">Players</a>
+                </li>
+
+            </ul>
+            <hr>
+            {% for title, content, date, authorid in polls %}
+            <div class="col-md-3 g-2 shadow bg-body rounded">
+                <div class="card h-100 border-0" id="card-id">
+                    <div class="card-header bg-transparent border-info">
+                        <h4 class="fs-6">{{ title.capitalize() }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0 fs-6 text-start">
+                            <p>{{ content }}</p>
+                            <i class="bi bi-star" id="star"></i>
+                            <br>
+                            <footer class="blockquote-footer">
+                                <i class="bi bi-person"></i>
+                                {{ authorid.capitalize() }}
+                                <cite title="source title">
+                                    <i class="bi bi-calendar-check"></i>
+                                    {{date}}
+                                </cite>
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <script>
+        let card = document.getElementsByClassName("card");
+        card.addEventListener("mouseover", function () {
+            document.getElementsByClassName("card").style.transform = "translateX(200px)";
+            console.log("mouseover")
+        })
+    </script>
+    {% endblock %}
+</body>
