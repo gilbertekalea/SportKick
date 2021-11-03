@@ -1,17 +1,13 @@
-from sqlite3.dbapi2 import Statement
 from flask import Flask, render_template, request, redirect, session
-from flask_session import Session
-from flask import url_for
-import sqlite3
-import datetime, time
-import random
+import sqlite3,datetime, time, random
 
 app = Flask(__name__)
 
 # sessions configuration
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "redis"
+# session(app)
+app.secret_key="SPORTY_COM"
 
 SPORTS = [
     "Dodgeball",
