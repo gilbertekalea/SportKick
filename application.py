@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3,datetime, time, random
+from api import the_sportsdb_api
 
 app = Flask(__name__)
 
@@ -146,3 +147,19 @@ def feeds():
             "SELECT TITLE, CONTENT, DATE_CREATED, AUTHORID FROM POST WHERE AUTHORID =?", (username,))
         print(username)
     return render_template("feeds.html", polls=polls)
+
+@app.route('/searchteam', methods=['GET', 'POST'])
+def search_team_form_dbs():
+    if request.method == 'GET':
+        return render_template('searchteam.html')
+    elif request.method == "POST":
+        if request.form.get("team_name"):
+            team_name = request.form.get('team_name')
+            req = the_sportsdb_api.search_by_team_name(team_name)
+            return render_template("sport.html", req=req)
+        elif request.form.get("player_name"):
+            player_name = request.form.get('player_name')
+            req = the_sportsdb_api.search_by_player_name(player_name)
+            return render_template('player.html', req=req)
+    
+

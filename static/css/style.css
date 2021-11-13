@@ -137,3 +137,13 @@ footer h3 {
   font-weight: bold;
 }
 
+#search_field form {
+  /* display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center; */
+  font-family: 'Times New Roman', Times, serif;
+  margin-top: 20%;
+  width: 50% !important;
+  margin-left: 25%;
+}

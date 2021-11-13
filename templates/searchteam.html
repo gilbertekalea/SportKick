@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <!-- Other meta data info go here -->
+    <!-- Bootstrap cdn -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous" />
+
+    <!-- for flask framework -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/style.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/normalize.css')}}" />
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet" />
+    <title>Soccer sports</title>
+</head>
+<main>
+    <section id="search_field">
+        <div class="container">
+            <form action="/searchteam" method="post">
+                <div class="row">
+                    <div class="col">
+                        <p>Search by Team Name: <span id="dynamic">Enter Full Team Name</span></p>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <input class="form-control" type="text" name="team_name"
+                            placeholder="Search any team: Manchester united" autofocus autocomplete="off" />
+                            <p id="change_search" onclick="create_element()">Click here to change the search query</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="submit" class="btn btn-dark" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script>
+            let inputElement = document.querySelector("input")
+            let changeSearch = document.getElementById("change_search")
+            let additional = document.getElementById("dynamic")
+            function create_element(){
+                inputElement.setAttribute("name", "player_name")
+                inputElement.setAttribute("placeholder", "Search any player: Danny Welbeck")
+                changeSearch.setAttribute("onclick", "switchAgain()")
+                additional.innerHTML = "Enter full name of the player: Wayne Rooney";
+
+            }
+            function switchAgain(){
+                inputElement.setAttribute("name", "team_name");
+                inputElement.setAttribute("placeholder", "Search any team: Manchester united");
+                changeSearch.setAttribute("onclick", "create_element()");
+                additional.innerHTML = "Enter Full Team Name: Manchester United"
+
+            }
+
+        </script>
+    </section>
+</main>
+{% block body%} {% endblock%}
+
+</html>

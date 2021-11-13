@@ -5,33 +5,46 @@ import requests, datetime
 # req = f"https://www.thesportsdb.com/api/v1/json/1/{query}.php?t={t.capitalize()}"
 class the_sportsdb_api:
     # BY SEARCH
-    def search_by_team_name(team_name, query='searchteams'):
+    def search_by_team_name(team_name="Manchester", query='searchteams'):
         """(str, str) --> list()
         Takes team name, and a querry and returns the list.
         """
         # We want to return information on for this keys. 
-        teams_keys = ['strTeam', 'intFormedYear', 'strSport', 'strLeague', 'idLeague', 'strLeague2', 'idLeague2', 'strDivision',
-                    'strManager', 'strStadium', 'strStadiumDescription', 'strStadiumLocation', 'intStadiumCapacity', 'strWebsite']
+        # teams_keys = ['strTeam', 'intFormedYear', 'strSport', 'strLeague', 'idLeague', 'strLeague2', 'idLeague2', 'strDivision',
+        #             'strManager', 'strStadium', 'strStadiumDescription', 'strStadiumLocation', 'intStadiumCapacity', 'strWebsite']
 
         url = f"https://www.thesportsdb.com/api/v1/json/1/{query.lower()}.php?t={team_name.capitalize()}" #making a request with specified paramenters from the user
         res = requests.get(url)
         text = res.json() #convert the response into json
 
-        data_list =  [] 
+        teams_keys = []
+        for key in text['teams'][0]:
+            teams_keys.append(key)
+
+        data_list =  []
         for i in range(len(text['teams'])):
             team_data = {} #store the data here after every loop.
             for j in range(len(teams_keys)):
-                if teams_keys[j] in teams_keys: #check if a key is in the list 'team_keys' if true;
-                    team_data[teams_keys[j]] = text['teams'][i][teams_keys[j]]
+                if text['teams'][i][teams_keys[j]] != None:
+                    if text['teams'][i][teams_keys[j]] !='':
+                        #check if a key is in the list 'team_keys' if true;
+                        team_data[teams_keys[j]] = text['teams'][i][teams_keys[j]]
+                    else:
+                        continue
                 else:
                     continue
             #before doing another interation for another obhject, append the data in the data_list
-            data_list.append(list[team_data])
+            data_list.append([team_data])
         #return list of dictionaries
-        print(data_list)
+        # print(data_list)
+        #print(teams_keys)
         return data_list
 
-    def search_by_player_name(first_name, last_name, search_players='searchplayers'):
+    def search_by_player_name(player_name, search_players='searchplayers'):
+        
+        full_name = player_name.split()
+        first_name = full_name[0]
+        last_name = full_name[1]
         
         url = f"https://www.thesportsdb.com/api/v1/json/1/{search_players.lower()}.php?p={first_name.capitalize()}%20{last_name.capitalize()}"
         req = requests.get(url)
@@ -57,7 +70,7 @@ class the_sportsdb_api:
                         # continue to the next key element
                     continue
             player_final_info.append([player_data])
-        print(player_final_info)
+        # print(player_final_info)
         return player_final_info
 
     def search_by_event_name(first_team, second_team, year=datetime.datetime.today().year):
@@ -85,11 +98,12 @@ class the_sportsdb_api:
                 else:
                     continue
             event_final_info.append(event_data)
-        print(event_final_info)
+        # print(event_final_info)
         return event_final_info
 
 # BY LIST
-    def list_all_sports():
+    def list_all_sports(sport_name):
+        
         url = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
         req = requests.get(url)
         response = req.json()
@@ -97,10 +111,14 @@ class the_sportsdb_api:
         sports_keys = []
         for keys in response['sports'][5].keys():
             sports_keys.append(keys)
-        # list of available sports and their description
+            
+        sport_final_info = []
         for i in range(len(response['sports'])):
             for j in range(len(sports_keys)):
+                # list of available sports and their description
                 if sports_keys[j] == "strSport":
-                    print(response['sports'][i][sports_keys[j]])
-                    
-the_sportsdb_api.list_all_sports()
+                    if response['sports'][i][sports_keys[j]] == sport_name.capitalize():
+                        sports_data = response['sports'][i]
+                        sport_final_info.append(sports_data)
+        return sport_final_info
+# the_sportsdb_api.search_by_team_name('Manchester United')
