@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+
+<body>
+   <div class="container">
+      <div class='row'>
+         <div class="col-lg-8 col-md-6 col-sm-12" style="border-right:10px solid rgba(0, 0, 0, 0.34);margin-top:50px">
+            <form method='POST' class="form-rigister">
+               {{login_form.hidden_tag()}}
+               <h1 class='text-danger font-weight-bold font-weight-normal'>Login: </h1>
+               <br>
+               <div class='mb-3'>
+                  {{login_form.username.label(class="form-label")}}
+                  {{login_form.username(class="form-control", autocomplete='off', placeholder='Username')}}
+               </div>
+               <div class='mb-3'>
+                  {{login_form.password.label(class="form-label")}}
+                  {{login_form.password(class="form-control", placeholder='Password')}}
+               </div>
+               <div class="mb-3 justify-content-end">
+                  {{login_form.submit(class='btn btn-sm btn-block btn-success')}}
+               </div>
+               <hr>
+               <div class="mb-3">
+                  <p class="font-monospace">You have no account with us? <a class="btn btn-sm btn-info" href="{{url_for('create_account_page')}}">Create Account</a>
+                  </p>
+               </div>
+            </form>
+         </div>
+         <div class='col-lg-4 col-md-6 col-sm-12'>
+            <h1 class="text-info font-weight-bolder">Our Partners: </h1>
+            <br>
+            <img src='https://content.sportslogos.net/slnet-505x505trans.png' width="100" height="100">
+            <img src='https://www.njmarlins.com/wp-content/uploads/sites/692/2015/04/seattle-mariners-logo.png'
+               width="100" height="100">
+         </div>
+      </div>
+   </div>
+</body>
+{% endblock %}
+
