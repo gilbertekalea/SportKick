@@ -1,11 +1,11 @@
 import datetime
-import random
 from flask import render_template, request, redirect, url_for, get_flashed_messages, flash, session
 from sport.forms import UserLoginForm
 from sport.forms import UserCreateAccountForm
 from sport import app, db
 from sport.forms import RegistrationForm, ViewUserProfileForm, CreatePostForm
-from sport.models import User, Attributes, Team, Post
+from sport.models import User, Attributes, Team, Post, Likes
+from sport.utility import utility
 from sport import login_manager
 from flask_login import current_user, login_required, login_user, logout_user
 
@@ -14,6 +14,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 def home_page():
     available_teams = Team.query.all()
     return render_template("home-page.html", available_teams=available_teams)
+
 
 @app.route('/auth/create-account/', methods=['GET', 'POST'])
 def create_account_page():
@@ -41,14 +42,16 @@ def create_account_page():
 
     return render_template('auth/create-account.html', signup_form=signup_form)
 
+
 @app.route('/auth/login/', methods=['POST', 'GET'])
 def login_page():
     login_form = UserLoginForm()
-
     if request.method == 'POST':
         if login_form.validate_on_submit():
             attempted_user = User.query.filter_by(
                 username=login_form.username.data).first()
+            if not attempted_user:
+                flash('you dont exit')
             if attempted_user and attempted_user.check_password_correction(user_password=login_form.password.data):
                 login_user(attempted_user)
                 flash(
@@ -58,6 +61,8 @@ def login_page():
                 flash(
                     f'Sorry! You have entered wrong credentials.', category='danger'
                 )
+        else:
+            flash('SOMETHING WENT WRONG')
     else:
         return render_template('auth/login.html', login_form=login_form)
 
@@ -66,6 +71,7 @@ def login_page():
 def logout_page():
     logout_user()
     return redirect(url_for('home_page', user='logged-out', content_type='available-teams'))
+
 
 @app.route("/user/register/", methods=["POST", "GET"])
 @login_required
@@ -108,28 +114,91 @@ def registration_page():
         return redirect(url_for('home_page', user=current_user.username, page='home-page', content='available-teams-to-register'))
     if request.method == "GET":
         return render_template("user/registration-form.html", register_form=register_form)
-    
+
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     flash('This page is restricted to Users with Accounts Only. If you enjoy our services, please follow the recommended instructions Below. ', category='info')
     return render_template('user/registration-form.html')
 
+
 @app.route('/user/user-profile/', methods=['POST', 'GET'])
 @login_required
 def view_user_profile():
     if request.method == 'GET':
-        team = Team.query.filter_by(id=int(current_user.team_id)).first()
-        sport = Attributes.query.filter_by(id=int(current_user.id)).first()
-
+        blog = Post.query.filter_by(creator_id=current_user.id).all()
+        creator = User.query.filter_by(id=blog[0].creator_id).first()
+        if current_user.team_id != None:
+            team = Team.query.filter_by(id=int(current_user.team_id)).first()
+            sport = Attributes.query.filter_by(id=int(current_user.id)).first()
+            post = Post.query.filter_by(creator_id=int(current_user.id)).count()
+        else:
+            team = None
+            sport = None
+            post= None
         user_profile = ViewUserProfileForm()
-        return render_template("user/user-profile.html", user_profile=user_profile, team=team, sport=sport)
-@app.route('/create-post/', methods=['POST', 'GET'])
-def create_post():
-    content=CreatePostForm()
+        return render_template("user/user-profile.html", user_profile=user_profile, team=team, sport=sport, post=post, blog=blog, creator=creator.first_name)
+
+@app.route('/blog/homepage/', methods=['POST', 'GET'])
+@login_required
+def blog_page():
+    content = CreatePostForm()
     
-    return render_template('blog/blog-create-post.html', content=content)  
+    # find all posts created by current_user.
+    blog = Post.query.filter_by(creator_id=current_user.id).all()
+        # creator=User.query.filter_by(id=blog[0].creator_id).first()
+   
+    if request.method == 'POST':
+        create_post = Post(
+            post_title=content.post_title.data,
+            post_content=content.post_content.data,
+            date_created = datetime.datetime.today(),
+            creator_id=current_user.id
+        )
+        db.session.add(create_post)
+        db.session.commit()
+        flash('Your post has been uploaded !!! ')
+        return redirect(url_for('home_page'))
+    
+    return render_template('blog/blog-create-post.html', content=content, blog=blog)
+
+@app.route('/schedule/')
+def schedule_page():
+    payload = utility.generate_schedule()
+    teams = payload[1]
+    # This line updates the Team column schedule id;
+    # This line is no more relevant since we do not store schedule data on the database.
+    for item in teams:
+        item = item.strip()
+        team = Team.query.filter_by(name=item + ' ' + 'Soccer Club').first()
+        team.update_schedule_id(team.id)
+
+    fixtures = payload[0]
+    main_fixture = []
+    # automatically generate fixtures and assign venue and dates to a specific game.
+    for i in range(len(fixtures)):
+        for j in range(len(fixtures[i])):
+            fixture = {}
+
+            # split the two teams playing and use index 1 team to find their stadium name
+            # used as a venue for hosting the game
+
+            home_team = fixtures[i][j].split(
+                'vs')  # extract home team stadiums,
+            stad = Team.query.filter_by(
+                name=home_team[0] + 'Soccer Club').first()
+            fixture['fixture'] = fixtures[i][j]
+            fixture['venue'] = stad.stadium
+            # returns time randomly generate.
+            fixture['kickoff_time'] = utility.generate_schedule_date()[0]
+            # returns dates -randomly generated
+            fixture['kickoff_date'] = utility.generate_schedule_date()[1]
+
+            main_fixture.append(fixture)
+
+    return render_template('schedule/schedule.html', main_fixture=main_fixture)
+
+
 @app.route('/create-team/')
 def admin_create_team():
     pass
-    

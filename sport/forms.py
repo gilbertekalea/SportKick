@@ -22,7 +22,7 @@ class RegistrationForm(FlaskForm):
 
     # dynamically display available teams to the users.
     available_teams = Team.query.filter_by(sports='Soccer')
-    teams = ['Select']
+    teams = ['Select',' ']
     for item in available_teams:
         teams.append(item.name)
 
@@ -74,11 +74,15 @@ class UserCreateAccountForm(FlaskForm):
 
     submit = SubmitField(label='Create Account:')
 
+
 class CreatePostForm(FlaskForm):
-    post_title = StringField(label='Title:', validators=[Length(min=15, max=50), DataRequired(0)])
-    post_content=TextAreaField(label='Description:', validators=[Length(max=1024), DataRequired()])
-    submit=SubmitField(label="Send Post")
-    
+    post_title = StringField(label='Title:', validators=[
+                             Length(min=15, max=50), DataRequired(0)])
+    post_content = TextAreaField(label='Description:', validators=[
+                                 Length(max=1024), DataRequired()])
+    submit = SubmitField(label="Send Post")
+
+
 class ViewUserProfileForm(FlaskForm):
     id = StringField(label='My Identification', validators=[DataRequired()])
     username = StringField(label='My Username', validators=[DataRequired()])
@@ -87,6 +91,9 @@ class ViewUserProfileForm(FlaskForm):
     email = StringField(label='Email', validators=[Email(), DataRequired()])
     date_of_birth = StringField(label='D.O.B', validators=[DataRequired()])
     team = StringField(label='Registered team', validators=[DataRequired()])
-    sport = StringField(label='Sport Registered', validators=[DataRequired()]) #retrieve from attributes
-    post = StringField(label='Posts Created', validators=[DataRequired()]) #retrieve from posts
-    skill = StringField(label='My Skills', validators=[DataRequired()]) #retrive from attrinutes
+    sport = StringField(label='Sport Registered', validators=[
+                        DataRequired()])  # retrieve from attributes
+    post = StringField(label='Posts Created', validators=[
+                       DataRequired()])  # retrieve from posts
+    skill = StringField(label='My Skills', validators=[
+                        DataRequired()])  # retrive from attrinutes

@@ -27,6 +27,7 @@ Home
             <div class="container">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id='availableTeams'>
                     {% for item in available_teams %}
+                    {% include 'includes/team-more-info.html' %}
                     <div class="col">
                         <div class="card shadow-sm bg-body rounded h-100">
                             <svg class="bd-placeholder-img card-img-top" width="100%" xmlns="http://www.w3.org/2000/svg"
@@ -41,11 +42,16 @@ Home
 
                                 <div class="d-flex justify-content-center align-items-center">
                                     <div class="btn">
-                                        <a href="{{url_for('registration_page')}}"
-                                            class='btn btn-sm btn-outline-info'>More Info</a>
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#teamMoreInfo-{{item.id}}">
+                                            More info
+                                        </button>
                                         {% if current_user.is_authenticated %}
-                                        <a href="{{url_for('registration_page')}}"
-                                            class='btn btn-sm btn-outline-primary'>Register</a>
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#teamMoreInfo">
+                                            <a href="{{url_for('registration_page')}}"
+                                                style="text-decoration: none;color:black">Register</a>
+                                        </button>
                                         {%else %}
                                         <a href="{{url_for('create_account_page')}}"
                                             class='btn btn-sm btn-outline-secondary'>Signup</a>
@@ -54,11 +60,13 @@ Home
                                 </div>
                                 <br>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">Formed:{{item.year_formed}}</small>
-                                    <small class="text-info">Spots:{{item.max_players}}</small>
+                                    <small class="text-muted">Year Formed:
+                                        <span style="color:blue">{{item.year_formed}}</span></small> 
+                                    <small class="text-muted">Remaining Spots: <span style="color:blue">
+                                        {{item.max_players}}
+                                    </span></small>
                                 </div>
                             </div>
-    
                         </div>
                     </div>
                     {% endfor %}
