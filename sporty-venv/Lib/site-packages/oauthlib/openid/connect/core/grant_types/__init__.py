@@ -5,7 +5,8 @@ oauthlib.openid.connect.core.grant_types
 from .authorization_code import AuthorizationCodeGrant
 from .base import GrantTypeBase
 from .dispatchers import (
-    AuthorizationCodeGrantDispatcher, AuthorizationTokenGrantDispatcher,
+    AuthorizationCodeGrantDispatcher,
+    AuthorizationTokenGrantDispatcher,
     ImplicitTokenGrantDispatcher,
 )
 from .hybrid import HybridGrant

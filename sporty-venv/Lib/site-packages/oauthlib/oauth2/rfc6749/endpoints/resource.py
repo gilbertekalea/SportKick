@@ -59,16 +59,21 @@ class ResourceEndpoint(BaseEndpoint):
         return self._tokens
 
     @catch_errors_and_unavailability
-    def verify_request(self, uri, http_method='GET', body=None, headers=None,
-                       scopes=None):
+    def verify_request(
+        self, uri, http_method="GET", body=None, headers=None, scopes=None
+    ):
         """Validate client, code etc, return body + headers"""
         request = Request(uri, http_method, body, headers)
         request.token_type = self.find_token_type(request)
         request.scopes = scopes
-        token_type_handler = self.tokens.get(request.token_type,
-                                             self.default_token_type_handler)
-        log.debug('Dispatching token_type %s request to %r.',
-                  request.token_type, token_type_handler)
+        token_type_handler = self.tokens.get(
+            request.token_type, self.default_token_type_handler
+        )
+        log.debug(
+            "Dispatching token_type %s request to %r.",
+            request.token_type,
+            token_type_handler,
+        )
         return token_type_handler.validate_request(request), request
 
     def find_token_type(self, request):
@@ -79,6 +84,8 @@ class ResourceEndpoint(BaseEndpoint):
         the most likely token type (if any) by asking each known token type
         to give an estimation based on the request.
         """
-        estimates = sorted(((t.estimate_type(request), n)
-                            for n, t in self.tokens.items()), reverse=True)
+        estimates = sorted(
+            ((t.estimate_type(request), n) for n, t in self.tokens.items()),
+            reverse=True,
+        )
         return estimates[0][1] if len(estimates) else None

@@ -9,8 +9,11 @@ from .authorization import AuthorizationEndpoint
 from .introspect import IntrospectEndpoint
 from .metadata import MetadataEndpoint
 from .pre_configured import (
-    BackendApplicationServer, LegacyApplicationServer, MobileApplicationServer,
-    Server, WebApplicationServer,
+    BackendApplicationServer,
+    LegacyApplicationServer,
+    MobileApplicationServer,
+    Server,
+    WebApplicationServer,
 )
 from .resource import ResourceEndpoint
 from .revocation import RevocationEndpoint

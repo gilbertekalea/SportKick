@@ -10,7 +10,10 @@ import logging
 
 from .endpoints.base import BaseEndpoint, catch_errors_and_unavailability
 from .errors import (
-    FatalClientError, OAuth2Error, ServerError, TemporarilyUnavailableError,
+    FatalClientError,
+    OAuth2Error,
+    ServerError,
+    TemporarilyUnavailableError,
 )
 
 log = logging.getLogger(__name__)
