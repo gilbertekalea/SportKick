@@ -4,17 +4,17 @@ from sport.forms import UserLoginForm
 from sport.forms import UserCreateAccountForm
 from sport import app, db
 from sport.forms import RegistrationForm, ViewUserProfileForm, CreatePostForm
-from sport.models import User, Attributes, Team, Post, Likes
-from sport.utility import utility
+from sport.models import User, Attributes, Team, Post, Bookmarks
+from sport.utility import schedule
 from sport import login_manager
 from flask_login import current_user, login_required, login_user, logout_user
 
+from sport.utility import blogsview
 
 @app.route('/')
 def home_page():
     available_teams = Team.query.all()
     return render_template("home-page.html", available_teams=available_teams)
-
 
 @app.route('/auth/create-account/', methods=['GET', 'POST'])
 def create_account_page():
@@ -66,10 +66,9 @@ def login_page():
     else:
         return render_template('auth/login.html', login_form=login_form)
 
-
 @app.route('/logout/')
 def logout_page():
-    logout_user()
+    logout_user()  
     return redirect(url_for('home_page', user='logged-out', content_type='available-teams'))
 
 
@@ -126,8 +125,7 @@ def unauthorized_callback():
 @login_required
 def view_user_profile():
     if request.method == 'GET':
-        blog = Post.query.filter_by(creator_id=current_user.id).all()
-        creator = User.query.filter_by(id=blog[0].creator_id).first()
+        blogs = Post.query.filter_by(creator_id=current_user.id).all()
         if current_user.team_id != None:
             team = Team.query.filter_by(id=int(current_user.team_id)).first()
             sport = Attributes.query.filter_by(id=int(current_user.id)).first()
@@ -137,34 +135,74 @@ def view_user_profile():
             sport = None
             post= None
         user_profile = ViewUserProfileForm()
-        return render_template("user/user-profile.html", user_profile=user_profile, team=team, sport=sport, post=post, blog=blog, creator=creator.first_name)
+        return render_template("user/user-profile.html", user_profile=user_profile, team=team, sport=sport, post=post, blogs=blogs)
 
 @app.route('/blog/homepage/', methods=['POST', 'GET'])
 @login_required
 def blog_page():
     content = CreatePostForm()
+    # blogs that current_user created.
+    user_blogs = Post.query.filter_by(creator_id=current_user.id).order_by(Post.date_created).limit(2)
     
-    # find all posts created by current_user.
-    blog = Post.query.filter_by(creator_id=current_user.id).all()
-        # creator=User.query.filter_by(id=blog[0].creator_id).first()
-   
-    if request.method == 'POST':
-        create_post = Post(
-            post_title=content.post_title.data,
-            post_content=content.post_content.data,
-            date_created = datetime.datetime.today(),
-            creator_id=current_user.id
-        )
-        db.session.add(create_post)
-        db.session.commit()
-        flash('Your post has been uploaded !!! ')
-        return redirect(url_for('home_page'))
+    # all blogs 
+    all_blogs = blogsview.blog()
     
-    return render_template('blog/blog-create-post.html', content=content, blog=blog)
+    # all blogs where that current_user has bookmarked. 
+    bookmarks = Bookmarks.query.all()
 
+    if request.method == 'POST':
+        # data received when a user clicks on the heart button to signify bookmarks. 
+        like = request.form.get('post_liked') #value = 1; used to increase likes count/ bookmarks
+        # the current post clicked or bookmarked by user.
+        postid = request.form.get('current_post_id')
+        # print(postid)
+        if like == '1': 
+            #? retrieve all occurances of the current post from the database. 
+            current_post = Post.query.filter_by(id=int(postid)).first()
+            
+            #? CHECK if current_user and currentpost has been bookedmarked
+            # ? Return the bookmarked posts where post_id equals current_post id. The post user clicked. 
+            book_mark= Bookmarks.query.filter_by(post_id=current_post.id).all()
+            
+            #! VALIDATION
+            # ? Before taking any actions such as updating the like count; 
+                # ?We need to verify that the current_post has been bookmarked or liked the current_user. 
+            for item in book_mark:
+                if item.liker_id == current_user.id:
+                    flash('You already liked this post', category='info')
+                    return redirect(url_for('blog_page'))
+            
+            else:
+                this_post = Post.query.filter_by(id=int(postid)).first()
+                post_bookmark = Bookmarks(
+                    post_id=this_post.id,
+                    liker_id = current_user.id
+                )
+                db.session.add(post_bookmark)
+                db.session.commit()
+                this_post.update_likes(like)
+                flash('You have liked this post', category='success')
+                return redirect(url_for('blog_page'))
+        else:
+            create_post = Post(
+                post_title=content.post_title.data,
+                post_content=content.post_content.data,
+                date_created = datetime.datetime.today(),
+                creator_id=current_user.id
+            )
+            db.session.add(create_post)
+            db.session.commit()
+            flash('Your post has been uploaded !!! ')
+            return redirect(url_for('blog_page'))
+        
+    # for get request
+    elif request.method == 'GET':
+        return render_template('blog/blog-create-post.html', content=content, user_blogs=user_blogs, all_blogs = all_blogs, bookmarks=bookmarks)
+    else:
+        flash('Sorry we have no idea what just happen', category='info')
 @app.route('/schedule/')
 def schedule_page():
-    payload = utility.generate_schedule()
+    payload = schedule.generate_schedule()
     teams = payload[1]
     # This line updates the Team column schedule id;
     # This line is no more relevant since we do not store schedule data on the database.
@@ -190,14 +228,13 @@ def schedule_page():
             fixture['fixture'] = fixtures[i][j]
             fixture['venue'] = stad.stadium
             # returns time randomly generate.
-            fixture['kickoff_time'] = utility.generate_schedule_date()[0]
+            fixture['kickoff_time'] = schedule.generate_schedule_date()[0]
             # returns dates -randomly generated
-            fixture['kickoff_date'] = utility.generate_schedule_date()[1]
+            fixture['kickoff_date'] = schedule.generate_schedule_date()[1]
 
             main_fixture.append(fixture)
 
     return render_template('schedule/schedule.html', main_fixture=main_fixture)
-
 
 @app.route('/create-team/')
 def admin_create_team():

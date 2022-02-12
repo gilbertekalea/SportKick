@@ -21,10 +21,10 @@ EXPERIENCES = ['Select', 'Expert', 'Amateur', 'Professional']
 class RegistrationForm(FlaskForm):
 
     # dynamically display available teams to the users.
-    available_teams = Team.query.filter_by(sports='Soccer')
-    teams = ['Select',' ']
-    for item in available_teams:
-        teams.append(item.name)
+    # available_teams = Team.query.filter_by(sports='Soccer')
+    teams = ['Select']
+    # for item in available_teams:
+    #     teams.append(item.name)
 
     first_name = StringField(label='First Name:', validators=[
                              Length(20), DataRequired()])
