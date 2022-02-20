@@ -52,9 +52,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{url_for('schedule_page')}}">Schedule</a>
                         </li>
+                        {% if current_user.is_authenticated%}
                         <li class="nav-item">
                             <a class="nav-link" href="{{url_for('blog_page')}}">Blog</a>
                         </li>
+                        {% endif%}
                     </ul>
                 </div>
                 <div class='col-lg-2'>
@@ -62,8 +64,12 @@
                         {% if current_user.is_authenticated%}
                         <li class="nav-item">
                             <a class="nav-link text-capitalize" href="{{url_for('view_user_profile')}}"
-                                style='color:rgba(255, 47, 47, 0.53)'>{{current_user.username}}</a>
-
+                                style='color:rgba(8, 4, 4, 0.945)'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-fill"
+                            viewBox="0 0 16 16">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        </svg>
+                            </a>
                         </li>
                         <li class="nav-item justify-content-end">
 

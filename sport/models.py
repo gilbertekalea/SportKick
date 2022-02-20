@@ -1,7 +1,6 @@
 from sport import db, bcrypt
 from flask_login import UserMixin, current_user
 from sport import login_manager
-import random
 
 
 class Team(db.Model):
@@ -24,11 +23,6 @@ class Team(db.Model):
 
     def has_enough_capacity(self):
         return self.max_players > 0
-
-    def update_schedule_id(self, schedule):
-        self.schedule_id = schedule
-        db.session.commit()
-        print("Schedule update!!")
 
 
 @login_manager.user_loader

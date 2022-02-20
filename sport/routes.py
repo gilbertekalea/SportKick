@@ -1,4 +1,5 @@
 import datetime
+from email.generator import DecodedGenerator
 from flask import (
     render_template,
     request,
@@ -6,7 +7,6 @@ from flask import (
     url_for,
     get_flashed_messages,
     flash,
-    session,
 )
 from sport.forms import UserLoginForm
 from sport.forms import UserCreateAccountForm
@@ -14,16 +14,16 @@ from sport import app, db
 from sport.forms import RegistrationForm, ViewUserProfileForm, CreatePostForm
 from sport.models import User, Attributes, Team, Post, Bookmarks
 from sport.utility import schedule
-from sport import login_manager
+from sport.utility.email import ManageEmailContext
+from sport import login_manager, mail
 from flask_login import current_user, login_required, login_user, logout_user
-
-
 from sport.utility import blogsview
 
 
 @app.route("/")
 def home_page():
     available_teams = Team.query.all()
+ 
     return render_template("home-page.html", available_teams=available_teams)
 
 
@@ -42,6 +42,13 @@ def create_account_page():
             )
             db.session.add(create_user)
             db.session.commit()
+            
+            person = ManageEmailContext(username=signup_form.username.data, email=signup_form.email, first_name=signup_form.first_name)
+        
+            message = person.compose_email_content()
+    
+            mail.send(message)
+            
             flash(
                 f"Congratulations!: {signup_form.username.data}, Your Account has been created.",
                 category="success",
@@ -49,13 +56,12 @@ def create_account_page():
             return redirect(
                 url_for("login_page", created=True, current_page="login-page")
             )
-
+            
         if signup_form.errors != {}:
             for err_msg in signup_form.errors.values():
                 flash(f"Oops We got a problem {err_msg}", category="danger")
 
     return render_template("auth/create-account.html", signup_form=signup_form)
-
 
 @app.route("/auth/login/", methods=["POST", "GET"])
 def login_page():
@@ -116,7 +122,7 @@ def registration_page():
 
         # This condition checks whether a current user is registered or not. By checking current' user column is_registered:
         # if it's returns true, it's displays an errror that the user is already registered and can redirect to appropriate pages.
-
+        
         if player.is_registered:
             attr = Attributes.query.filter_by(id=player.id).first()
             team = Team.query.filter_by(id=player.id).first()
@@ -132,11 +138,21 @@ def registration_page():
             )
             player.update_user_registration()
             player.update_user_team_id(team)
-            flash(f"Thank you We are looking forward to enjoy", category="success")
+
+            flash(f"Successfully submitted.", category="success")
+            
             # # Then update the user if the user column for=> is_registered, and team_id.
             db.session.add(create_attributes)
             db.session.commit()
-
+        
+            # Send Confirmation Email to User. 
+            user = User.query.filter_by(id=current_user.id)
+            for item in user:
+                # creates instance of an user. 
+                obj = ManageEmailContext(item.username, item.email, item.first_name)
+                my_message = obj.compose_email_content()
+                mail.send(my_message)
+                
             # future improvement => redirects user to the team page where he's registered
             # Can read team decription, view other players and maximum number of players.
         return redirect(
@@ -271,7 +287,7 @@ def schedule_page():
     for item in teams:
         item = item.strip()
         team = Team.query.filter_by(name=item + " " + "Soccer Club").first()
-        team.update_schedule_id(team.id)
+        # team.update_schedule_id(team.id)
 
     fixtures = payload[0]
     main_fixture = []

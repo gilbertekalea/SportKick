@@ -3,6 +3,7 @@
 <body>
   <div class="container">
     <div class="row">
+      <!-- Dashboard for users -->
       <div class="col-lg-4 col-md-6 col-sm-12" style="margin-top: 30px">
         <div class="card shadow-lg p-3 mb-5 bg-body rounded">
           <ul
@@ -10,16 +11,19 @@
             style="font-family: 'Merriweather', serif"
           >
             <li class="list-group-item mb-2">DASHBOARD</li>
-            <li class="list-group-item mb-2">PERSONAL INFORMATION</li>
+            <li class="list-group-item mb-2">
+              <a href="#personal-data">
+              PERSONAL INFORMATION
+            </a></li>
             <li class="list-group-item mb-2">PRIVACY AND SECURITY</li>
             <li class="list-group-item mb-2">PAYMENTS</li>
           </ul>
         </div>
       </div>
-      <div
-        class="col-lg-8 col-md-6 col-sm-12 g-3"
-        style="border-right: 1px solid rgba(0, 0, 0, 0.36); margin-top: 20px"
-      >
+
+    <!-- User profile information -->
+    <section id="personal-data">
+      <div class="col-lg-8 col-md-6 col-sm-12 g-3" style="border-right: 1px solid rgba(0, 0, 0, 0.36); margin-top: 20px">
         <div class="mb-3">
           <h3 class="font-weight-bolder text-info" style="color: black">
             EDIT INFORMATION
@@ -28,7 +32,6 @@
             Edit My Data
           </button>
         </div>
-
         <form method="POST" class="form-rigister">
           {{user_profile.hidden_tag()}}
           <div
@@ -125,9 +128,16 @@
           {% endif %}
         </form>
       </div>
+    </section>
+    <!-- User personal data ends -->
     </div>
+
   </div>
   <hr />
+
+
+
+
   <section id="recent-blogs">
     <div class="container">
       <h4>Blogs You have created.</h4>
