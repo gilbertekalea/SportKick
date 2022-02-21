@@ -78,9 +78,7 @@
                                 <!-- Sent when the user likes the content, the post like count will be updates accordingly -->
                                 <input type="hidden" name="post_liked" value="1" />
                                 <input type="hidden" name="current_post_id" value="{{item.id}}" />
-
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -159,23 +157,10 @@
                         console.log(this.id);
                         document.getElementById(`likes-${this.id}`).innerHTML = parseInt(val) + 1;
                         this.submit(); 
+                        
                         { once: true }
                     });
-                }
-
-                let card = document.getElementsByClassName('card')
-                for (let i = 0; i < card.length; i++) {
-                    card[i].addEventListener(
-                        'mouseover', function (event) {
-                            this.style.transform = 'scaleX(0.9)';
-                            this.style.transform = 'scaleY(0.9)'
-                        })
-                    card[i].addEventListener('mouseleave', function (event) {
-                        this.style.transform = 'scaleX(1.0)'
-                        this.style.transform = 'scaleY(1.0)'
-                    }
-                    )
-                } 
+                }                
             </script>
         </div>
     </section>
