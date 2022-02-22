@@ -11,12 +11,12 @@ To bring this project to a completion I applied a variety of technical and non-t
 Lastly, I successfully implement different routes and logic on how to handle different Post requests methos. For example, Using Javascript; I used addEventListers to change the color of blogs where use had already bookmarked and using python I handled the the double counting of the bookmarked Blog. Each Blog has counts on how many times have been bookmarked by a user. Once a user clicks the blog, the data will be sent to the server and the Bookmark table will be updated according. Now, if a user clicks again same post; The program checks if the current user  have already liked the current post. This is done through query the database and validate it before updating the count. 
 
 # Project Features
-### User authentication using Flask_login
-### Bookmarking/Favourite
-### Account creation/login
-### Information Access restriction --> Some features/pages can only be accessed by users who have created account and they're logged in.
-### Customized Dashboard for User profile data --> Blogs created, Blogs bookmarked, Team registered, 
- ### Email automation -> When a user registers for sport, or creates account, or just general emails etc. 
+        User authentication using Flask_login
+        Bookmarking/Favourite
+        Account creation/login
+        Information Access restriction -> Some features/pages can only be accessed by users who have created account and they're logged in.
+        Customized Dashboard for User profile data ->Blogs created, Blogs bookmarked, Team registered, 
+        Email automation -> When a user registers for sport, or creates account, or just general emails etc. 
 
 # Non Technical Skills 
 I applied what I learnt from my undergraduate program on system design and modeling to provide the most minimal and yet easy to understand flow chart and entity relational diagrams to average person. 
