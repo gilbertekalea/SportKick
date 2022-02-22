@@ -21,17 +21,17 @@ Lastly, I successfully implement different routes and logic on how to handle dif
 # Non Technical Skills 
 I applied what I learnt from my undergraduate program on system design and modeling to provide the most minimal and yet easy to understand flow chart and entity relational diagrams to average person. 
 
-### [Database Entity Relational Diagram IMAGE BELOW](https://lucid.app/lucidchart/b89e6222-ec44-4925-8b19-a9ce1d67381c/edit?viewport_loc=0%2C48%2C2274%2C1074%2C0_0&invitationId=inv_7b379fb1-088d-465f-a412-92f7c02b9b80)
+#### [Database Entity Relational Diagram IMAGE BELOW](https://lucid.app/lucidchart/b89e6222-ec44-4925-8b19-a9ce1d67381c/edit?viewport_loc=0%2C48%2C2274%2C1074%2C0_0&invitationId=inv_7b379fb1-088d-465f-a412-92f7c02b9b80)
 
-### [Website flow diagram/Flow chart](https://lucid.app/lucidchart/b89e6222-ec44-4925-8b19-a9ce1d67381c/edit?invitationId=inv_7b379fb1-088d-465f-a412-92f7c02b9b80)
+#### [Website flow diagram/Flow chart](https://lucid.app/lucidchart/b89e6222-ec44-4925-8b19-a9ce1d67381c/edit?invitationId=inv_7b379fb1-088d-465f-a412-92f7c02b9b80)
 
 # Technical skills:
-#### Python Object Oriented Programming - utilized the use of classess, and functions; 
-#### Web Development technologies and libraries --> Used primary boostrap to design the layout of this project. Also, used Javascript to implement eventlisters. I used Jquery ajax to implement Assynchronous programming since flask reloads the page when POST request is made. 
-#### Sqlalchemy --> Object relational Mappers.
+        Python Object Oriented Programming - utilized the use of classess, and functions; 
+        Web Development technologies and libraries --> Used primary boostrap to design the layout of this project. Also, used Javascript to implement eventlisters. 
+        I used Jquery ajax to implement Assynchronous programming since flask reloads the page when POST request is made.   
+        Sqlalchemy -> Object relational Mappers.
 
 ### How to run this project on your machine. 
-
 ### First thing first: You need to install flask and other dependencies. run the following command; 
         windows:
         pip install -r requirements.txt
