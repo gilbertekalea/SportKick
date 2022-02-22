@@ -66,7 +66,7 @@ class ManageEmailTemplate(UserRelevantData):
             msg = Message(
             subject="CORNFIRMATION EMAIL: Account Created Successfully",
             sender="gilbertekale@gmail.com",
-            recipients=['gilbertekalea@gmail.com'],
+            recipients=[self.email],
             html=self.get_account_creation_email_template().render(username=self.username, ),
             charset="utf-8"
             )

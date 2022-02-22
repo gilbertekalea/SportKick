@@ -180,7 +180,6 @@ def registration_page():
             "user/registration-form.html", register_form=register_form
         )
 
-
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     flash(
@@ -201,6 +200,7 @@ def view_user_profile():
             team = Team.query.filter_by(id=int(current_user.team_id)).first()
             sport = Attributes.query.filter_by(id=int(current_user.id)).first()
             post = Post.query.filter_by(creator_id=int(current_user.id)).count()
+            
         else:
             team = None
             sport = None
@@ -215,7 +215,6 @@ def view_user_profile():
             blogs=blogs,
         )
 
-
 @app.route("/blog/homepage/", methods=["POST", "GET"])
 @login_required
 def blog_page():
@@ -226,7 +225,7 @@ def blog_page():
         .order_by(Post.date_created)
         .limit(2)
     )
-
+    
     # all blogs
     all_blogs = blogsview.blog()
 
@@ -254,7 +253,7 @@ def blog_page():
             # ?We need to verify that the current_post has been bookmarked or liked the current_user.
             for item in book_mark:
                 if item.liker_id == current_user.id:
-                    flash("You already liked this post", category="info")
+                    flash("You already liked this post", category="info animate__animated animate__flash")
                     return redirect(url_for("blog_page"))
 
             else:
