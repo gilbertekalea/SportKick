@@ -1,5 +1,5 @@
 # Sporty.com Web App
-Sporty is a web application where users can find and register for recreational local sport clubs. Also, Users can create posts, bookmarked favourite blogs from their favorite teams and other users. 
+Sporty is a web application where users can find and register for recreational local sport clubs. Users can create posts, bookmarked their favourite blogs. 
 
 ## Goal of the Project:
 The goal of this project was to build a full stack web application using Flask. My passion for sports led me into designing and building this project. Sporty.com was built with a soccer game in mind. Players/prospects looking for a team can view details of available teams an click to register; or Will want to post something interesting about sports in terms of mini-blog. Other players can bookmark the blog if they're interest in it. 
@@ -35,7 +35,7 @@ I applied what I learnt from my undergraduate program on system design and model
 ### First thing first: You need to install flask and other dependencies. run the following command; 
         windows:
         pip install -r requirements.txt
-        
+
 
 ### Now tproject set up is ready; 'CD to sport directory and run the following commands in your terminal.
     Powershell:
