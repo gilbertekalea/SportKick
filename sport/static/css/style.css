@@ -1,8 +1,0 @@
-#home-page-section {
-    background-image: url('../images/home.JPG');
-    background-position: center;
-    /* Center the image */
-    background-repeat: no-repeat;
-    /* Do not repeat the image */
-    background-size: cover;
-}

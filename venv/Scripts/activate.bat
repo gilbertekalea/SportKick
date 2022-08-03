@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\gilbe\Desktop\workstation\personal projects\python projects\flask projects\flask sport\venv
+set VIRTUAL_ENV=C:\Users\gilbe\Desktop\workstation\personal_projects\python_projects\flask_projects\sporty_webapp\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

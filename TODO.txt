@@ -1,0 +1,15 @@
+Next Features for my project:
+
+----
+
+1.Implement delete and edit functionality where users can delete existing team, edit/update information.
+2. Change Home page layout design
+3. Create a Schedule entity, league table(with relevant features to support a fully functional)
+4. Create Flow chart, entity relationship and data flow diagrams
+5. Focus on error handling -> very important. 
+-------
+Completed:
+--
+1. Reset password
+2. Add a team functionality
+3.

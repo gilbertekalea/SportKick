@@ -1,0 +1,33 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#static">
+  Create Post
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="static" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="POST">
+                {{content.hidden_tag()}}
+                <div class="modal-header">
+                    <h3>Create Post</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{content.post_title.label(class="form-label")}} {{content.post_title(class='form-control')}}
+                    </div>
+
+                    <div class="mb-3">
+                        {{content.post_content.label(class="form-label")}} {{content.post_content(class='form-control font-weight-bolder')}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button> {{content.submit(class="btn btn-primary")}}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

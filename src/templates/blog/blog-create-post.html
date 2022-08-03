@@ -1,0 +1,181 @@
+{% extends 'base.html'%} {% block title %} Create Post {% endblock %} {% block content %}
+<main id="blog" class="container mt-2">
+    <section id="blog-recent">
+        <div class="container">
+            <div class="card border-0 shadow-sm p-3 mb-3 rounded" style="background-color:aqua">
+                <div class="card-body">
+                    <h3 class="card-title">Recently on the news</h3>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        Montreal Man caught by the police, 2021
+                    </h6>
+                    <p class="card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis reprehenderit sit natus,
+                        dolore totam amet autem explicabo excepturi quibusdam cupiditate! Modi iste repellendus in
+                        placeat, suscipit ut rerum accusamus totam!
+                    </p>
+                    <a href="" class="btn btn-outline-primary">Continue Reading...</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="create-post">
+        <div class="container">
+            <div class="card border-0 shadow-sm p-3 mb-3 rounded" style="background-color:bisque">
+                <div class="card-body">
+                    <h5 class="card-title">Take Actions</h5>
+                    <p class="card-text">
+                        Take actions quickly by selecting any of the options below.
+                    </p>
+                    <a href="#" class="btn btn-dark btn-sm">Sign up</a> {% include 'includes/post-modal.html'
+                    %}
+                    <a href="{{url_for('schedule.schedule_page', dates='2022/23 season')}}"
+                        class="btn btn-dark btn-sm">Fixtures</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="recent-blogs">
+        <div class="container">
+            <h4>Create and Written By.</h4>
+            <hr />
+            <div class="row row-cols-1 row-cols-md-2 g-2">
+                {% if current_user.is_authenticated %} {% for item in user_blogs %}
+                <div class="col">
+                    <div class="card shadow-sm p-3 mb-3 rounded h-100" style="background-color:aliceblue">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-bold d-flex justify-content-between">
+                                {{item.post_title}} {{item.id}}
+                                <!-- bookmarkeds item -->
+                                {% for item_marked in bookmarks %} {% if item_marked.post_id == item.id %}{% if
+                                item_marked.liker_id == current_user.id %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                    class="bi bi-bookmark-heart" viewBox="0 0 16 16" id="book-{{item.id}}">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z" />
+                                    <path
+                                        d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
+                                    <rect x="10" y="10" width="100" height="100" />
+                                </svg> {% endif %}{% endif %} {% endfor %}
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-primary">
+                                {{item.date_created[:16]}}, Author:
+                                <span style="color: rgb(255, 0, 221)">
+                                    
+                                     <a href="{{url_for('user.view_user_profile')}}">{{current_user.first_name}}</a></span>
+                                    
+                            </h6>
+                            <p class="card-text">{{item.post_content}}</p>
+                            <!-- heart icon for likes.  -->
+                            <form method="post" id="item-{{item.id}}">
+                                <p>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-heart" viewBox="0 0 16 16" aria-hidden="true">
+                                        <path
+                                            d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                                    </svg>
+                                    <span id="likes-item-{{item.id}}">{{item.likes_count}}</span>
+                                </p>
+                                <!-- Sent when the user likes the content, the post like count will be updates accordingly -->
+                                <input type="hidden" name="post_liked" value="1" />
+                                <input type="hidden" name="current_post_id" value="{{item.id}}" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %} {% endif %}
+            </div>
+
+            <!-- Recent posts  -->
+            <br>
+            <h4>Popular Posts.</h4>
+            <hr />
+            <div class="row row-cols-1 row-cols-md-2 g-2">
+                {% for item in all_blogs %} {% if item.creator_name != current_user.first_name %}
+                <div class="col">
+                    <div class="card shadow-sm p-3 mb-3 bg-body rounded h-100">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-bold d-flex justify-content-between">
+                                {{item.post_title}} {{item.id}}
+                                <!-- bookmarkeds item -->
+                                {% for item_marked in bookmarks %} {% if item_marked.post_id == item.id %}{% if
+                                item_marked.liker_id == current_user.id %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                    class="bi bi-bookmark-heart" viewBox="0 0 16 16" id="book-{{item.id}}">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z" />
+                                    <path
+                                        d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
+                                    <rect x="10" y="10" width="100" height="100" />
+                                </svg> {% endif %}{% endif %} {% endfor %}
+                            </h5>
+
+                            <h6 class="card-subtitle mb-2 text-primary">
+                                {{item.date_created[:16]}}, Author:
+                                  <a href="{{url_for('user.view_user_profile')}}">
+                                <span style="color: rgb(255, 0, 221)">
+                                  {{item.creator_name}}
+                                        
+                                    </span>
+                                </a>
+                            </h6>
+                            <p class="card-text">{{item.post_content}}</p>
+
+                            <!-- heart icon for likes.  -->
+                            <form method="post" id="item-{{item.id}}">
+                                <p>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-heart" viewBox="0 0 16 16" aria-hidden="true" onclick="perform()">
+                                        <path
+                                            d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                                    </svg>
+                                    <span id="likes-item-{{item.id}}">{{item.likes_count}}</span>
+
+                                </p>
+
+                                <!-- Sent when the user likes the content, the post like count will be updates accordingly -->
+                                <input type="hidden" name="post_liked" value="1" />
+                                <input type="hidden" name="current_post_id" value="{{item.id}}" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %} {% endfor %}
+            </div>
+
+            <script>
+                // EventLister for for bookmarked posts; 
+                let svgs = document.querySelectorAll("svg"); for (var i = 0; i < svgs.length; i++) {
+                    svgs[i].addEventListener("load", function (event) {
+                        console.log(this.id);
+                        eleme = document.getElementById(this.id);
+                        eleme.setAttribute("class", "text-danger");
+                    },
+                    );
+                } 
+                // EventLister for clicking the heart svg. 
+                let btn = document.querySelectorAll("form");
+                for (var i = 0; i < btn.length; i++) {
+                    btn[i].addEventListener("click", function perform(event) {
+                        this.setAttribute("class", "text-primary");
+                        let val = document.getElementById(`likes-${this.id}`).innerHTML.valueOf(this.id);
+                        document.getElementById(`likes-${this.id}`).innerHTML = parseInt(val) + 1;
+                        this.submit()
+                       
+                        { once: true }
+                    })
+                }
+
+            </script>
+        </div>
+    </section>
+
+    <style>
+        svg,
+        .card {
+            cursor: pointer;
+        }
+    </style>
+</main>
+{% endblock %}
