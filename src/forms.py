@@ -89,17 +89,17 @@ class UserCreateAccountForm(FlaskForm):
     )
 
     date_of_birth = DateField(label="Date of Birth", validators=[DataRequired()])
-    email = StringField(label="Email", validators=[Email(), DataRequired()])
+    email = StringField(label="Email:", validators=[Email(), DataRequired()])
 
     password1 = PasswordField(
-        label="Password", validators=[Length(min=6), DataRequired()]
+        label="Password:", validators=[Length(min=6), DataRequired()]
     )
 
     password2 = PasswordField(
         label="Confirm Password:", validators=[DataRequired(), EqualTo("password1")]
     )
 
-    submit = SubmitField(label="Create Account:")
+    submit = SubmitField(label="Create Account")
 
 
 class CreatePostForm(FlaskForm):
@@ -113,30 +113,30 @@ class CreatePostForm(FlaskForm):
 
 
 class ViewUserProfileForm(FlaskForm):
-    id = StringField(label="My Identification", validators=[DataRequired()])
-    username = StringField(label="My Username", validators=[DataRequired()])
-    first_name = StringField(label="First Name", validators=[DataRequired()])
-    last_name = StringField(label="Last Name", validators=[DataRequired()])
+    id = StringField(label="My Identification:", validators=[DataRequired()])
+    username = StringField(label="My Username:", validators=[DataRequired()])
+    first_name = StringField(label="First Name:", validators=[DataRequired()])
+    last_name = StringField(label="Last Name:", validators=[DataRequired()])
     email = StringField(label="Email", validators=[Email(), DataRequired()])
     date_of_birth = StringField(label="D.O.B", validators=[DataRequired()])
-    team = StringField(label="Registered team", validators=[DataRequired()])
+    team = StringField(label="Registered team:", validators=[DataRequired()])
     sport = StringField(
-        label="Sport Registered", validators=[DataRequired()]
+        label="Sport Registered:", validators=[DataRequired()]
     )  # retrieve from attributes
     post = StringField(
-        label="Posts Created", validators=[DataRequired()]
+        label="Posts Created:", validators=[DataRequired()]
     )  # retrieve from posts
     skill = StringField(
-        label="My Skills", validators=[DataRequired()]
+        label="My Skills:", validators=[DataRequired()]
     )  # retrive from attrinutes
 
 class AddSportTeam(FlaskForm):
-    name= StringField(label="Club Name", validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    sports = StringField(label='Sport', validators=[DataRequired()])
-    year_formed = StringField(label='Year Formed',validators=[DataRequired()])
-    location = StringField(label='Location', validators=[DataRequired()])
-    stadium =StringField(label='Stadium Name', validators=[DataRequired()])
+    name= StringField(label="Club Name:", validators=[DataRequired()])
+    description = TextAreaField('Description:', validators=[DataRequired()])
+    sports = StringField(label='Sport:', validators=[DataRequired()])
+    year_formed = StringField(label='Year Formed:',validators=[DataRequired()])
+    location = StringField(label='Location:', validators=[DataRequired()])
+    stadium =StringField(label='Stadium Name:', validators=[DataRequired()])
     submit = SubmitField(label="Add")
 
 class CheckEmailForm(FlaskForm):
@@ -144,7 +144,7 @@ class CheckEmailForm(FlaskForm):
     submit = SubmitField(label='Continue')
 
 class ForgotPasswordForm(FlaskForm):
-    email = StringField(label='Email', validators=[Email(), DataRequired()])
-    password = PasswordField(label="New Password", validators=[Length(min=8), DataRequired()])
-    confirm_password = PasswordField(label='Confirm Password', validators=[EqualTo('new_password')])
+    email = StringField(label='Email:', validators=[Email(), DataRequired()])
+    password = PasswordField(label="New Password:", validators=[Length(min=8), DataRequired()])
+    confirm_password = PasswordField(label='Confirm Password:', validators=[EqualTo('new_password')])
     submit = SubmitField(label='Confirm Change')

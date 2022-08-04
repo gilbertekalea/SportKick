@@ -2,45 +2,50 @@
 
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-6 col-sm-12" style="border: 1px solid rgba(0, 0, 0, 0.278)">
-                <form method="POST" class="form-rigister" style="margin-top: 10px; margin-left: 20px">
+        <form method="POST" class="form-rigister" style="margin-top: 10px; margin-left: 20px">
+            <div class="row justify-content-center">
+                <div class="col-lg-5 col-md-6 col-sm-12">
                     {{signup_form.hidden_tag()}}
-                    <h1 class="text-danger font-weight-normal">Create Account:</h1>
-                    <br />
+                    <h3 class="text-dark font-weight-normal">Create Account</h3>
+                    <hr>
                     <div class="mb-3">
-                        {{signup_form.username.label(class="form-label")}} {{signup_form.username(class="form-control",autocomplete='off', placeholder='Username')}}
+                        {{signup_form.username.label(class="form-label")}}
+                        {{signup_form.username(class="form-control",autocomplete='off', placeholder='Username')}}
                     </div>
                     <div class="mb-3">
-                        {{signup_form.first_name.label(class="form-label")}} {{signup_form.first_name(class="form-control",autocomplete='off',placeholder='First Name')}}
+                        {{signup_form.first_name.label(class="form-label visually-hidden")}}
+                        {{signup_form.first_name(class="form-control",autocomplete='off',placeholder='First Name',
+                        value='Jane', type='hidden')}}
                     </div>
                     <div class="mb-3">
-                        {{signup_form.last_name.label(class="form-label")}} {{signup_form.last_name(class="form-control",autocomplete='off',placeholder='Last Name')}}
+                        {{signup_form.last_name.label(class="form-label visually-hidden")}}
+                        {{signup_form.last_name(class="form-control",autocomplete='off',placeholder='Last Name',
+                        value='Doe', type='hidden')}}
                     </div>
                     <div class="mb-3">
-                        {{signup_form.date_of_birth.label(class="form-label")}} {{signup_form.date_of_birth(class="form-control",placeholder='D.O.B')}}
+                        {{signup_form.date_of_birth.label(class="form-label visually-hidden")}}
+                        {{signup_form.date_of_birth(class="form-control",placeholder='D.O.B', value='2022-08-08',
+                        type='hidden')}}
                     </div>
                     <div class="mb-3">
-                        {{signup_form.email.label(class="form-label")}} {{signup_form.email(class="form-control",autocomplete='off',placeholder='Email')}}
+                        {{signup_form.email.label(class="form-label")}}
+                        {{signup_form.email(class="form-control",autocomplete='off',placeholder='Email')}}
                     </div>
                     <div class="mb-3">
-                        {{signup_form.password1.label(class="form-label")}} {{signup_form.password1(class="form-control",placeholder='Password')}}
+                        {{signup_form.password1.label(class="form-label")}}
+                        {{signup_form.password1(class="form-control",placeholder='Password')}}
                     </div>
                     <div class="mb-3">
-                        {{signup_form.password2.label(class="form-label")}} {{signup_form.password2(class="form-control",placeholder='Confirm Paasword')}}
+                        {{signup_form.password2.label(class="form-label")}}
+                        {{signup_form.password2(class="form-control",placeholder='Confirm Paasword')}}
                     </div>
                     <div class="mb-3">
-                        {{signup_form.submit(class='btn btn-sm btn-block btn-success')}}
+                        {{signup_form.submit(class='btn btn-sm btn-block btn-info')}}
                     </div>
-                </form>
+                </div>
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <h1 class="text-info font-weight-bolder">Our Partners:</h1>
-                <br />
-                <img src="https://content.sportslogos.net/slnet-505x505trans.png" width="100" height="100" />
-                <img src="https://www.njmarlins.com/wp-content/uploads/sites/692/2015/04/seattle-mariners-logo.png" width="100" height="100" />
-            </div>
-        </div>
+        </form>
+
     </div>
 </body>
 {% endblock %}
