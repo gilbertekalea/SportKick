@@ -32,23 +32,26 @@ def create_account_page():
         if signup_form.validate_on_submit():
             create_user = schemas.User(
                 username=signup_form.username.data,
-                first_name=signup_form.first_name.data,
-                last_name=signup_form.last_name.data,
-                date_of_birth=signup_form.date_of_birth.data,
+                first_name= 'Jane',
+                # signup_form.first_name.data,
+                last_name= 'Doe',
+                # signup_form.last_name.data,
+                date_of_birth='19-20-2022',
+                # signup_form.date_of_birth.data,
                 email=signup_form.email.data,
                 password=signup_form.password1.data,
             )
             db.session.add(create_user)
             db.session.commit()
             
-            person = ManageEmailTemplate(
-                username=signup_form.username.data,
-                email=signup_form.email,
-                first_name=signup_form.first_name,
-                name='account-creation'
-            )
-            email_template = person.email_channel_composer()
-            mail.send(email_template)
+            # person = ManageEmailTemplate(
+            #     username=signup_form.username.data,
+            #     email=signup_form.email,
+            #     first_name=signup_form.first_name,
+            #     name='account-creation'
+            # )
+            # email_template = person.email_channel_composer()
+            # mail.send(email_template)
 
             flash(
                 f"Congratulations!: {signup_form.username.data}, Your Account has been created.",
@@ -59,7 +62,7 @@ def create_account_page():
             )
 
         if signup_form.errors != {}:
-            for err_msg in signup_form.errors.values():
+            for err_msg in signup_form.errors:
                 flash(f"Oops We got a problem {err_msg}", category="danger")
                 return redirect(url_for('user.create_account_page'))
                 
@@ -221,12 +224,11 @@ def view_user_profile():
             fav_post = book
         )
 # implementing forgot password mechanism.
-
 @user_bp.route('/auth/user/forgot-password/check-email', methods=['GET', 'POST'])
 def ask_for_email_page():
     '''
     This route, checks user by email, if the user is found, redirects to forgot_password_page.
-    
+
     '''
     check_email = CheckEmailForm()
     # First ask user email to verify if they exist in the database.
