@@ -130,21 +130,28 @@ class ViewUserProfileForm(FlaskForm):
         label="My Skills:", validators=[DataRequired()]
     )  # retrive from attrinutes
 
+
 class AddSportTeam(FlaskForm):
-    name= StringField(label="Club Name:", validators=[DataRequired()])
-    description = TextAreaField('Description:', validators=[DataRequired()])
-    sports = StringField(label='Sport:', validators=[DataRequired()])
-    year_formed = StringField(label='Year Formed:',validators=[DataRequired()])
-    location = StringField(label='Location:', validators=[DataRequired()])
-    stadium =StringField(label='Stadium Name:', validators=[DataRequired()])
+    name = StringField(label="Club Name:", validators=[DataRequired()])
+    description = TextAreaField("Description:", validators=[DataRequired()])
+    sports = StringField(label="Sport:", validators=[DataRequired()])
+    year_formed = StringField(label="Year Formed:", validators=[DataRequired()])
+    location = StringField(label="Location:", validators=[DataRequired()])
+    stadium = StringField(label="Stadium Name:", validators=[DataRequired()])
     submit = SubmitField(label="Add")
 
+
 class CheckEmailForm(FlaskForm):
-    email = StringField(label='Email', validators=[Email(), DataRequired()])
-    submit = SubmitField(label='Continue')
+    email = StringField(label="Email", validators=[Email(), DataRequired()])
+    submit = SubmitField(label="Continue")
+
 
 class ForgotPasswordForm(FlaskForm):
-    email = StringField(label='Email:', validators=[Email(), DataRequired()])
-    password = PasswordField(label="New Password:", validators=[Length(min=8), DataRequired()])
-    confirm_password = PasswordField(label='Confirm Password:', validators=[EqualTo('new_password')])
-    submit = SubmitField(label='Confirm Change')
+    email = StringField(label="Email:", validators=[Email(), DataRequired()])
+    password = PasswordField(
+        label="New Password:", validators=[Length(min=8), DataRequired()]
+    )
+    confirm_password = PasswordField(
+        label="Confirm Password:", validators=[EqualTo("new_password")]
+    )
+    submit = SubmitField(label="Confirm Change")

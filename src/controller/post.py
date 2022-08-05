@@ -3,8 +3,8 @@ from flask_login import UserMixin, current_user
 from src import login_manager
 from src.model import schemas
 
-class Post(schemas.Post):
 
+class Post(schemas.Post):
     def update_likes(self, like):
         if self.likes_count != None:
             self.likes_count += int(like)

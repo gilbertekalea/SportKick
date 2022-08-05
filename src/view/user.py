@@ -8,6 +8,7 @@ from flask import (
     url_for,
     get_flashed_messages,
     flash,
+    jsonify,
 )
 from src.forms import UserLoginForm, ForgotPasswordForm, CheckEmailForm
 from src.forms import UserCreateAccountForm
@@ -15,7 +16,7 @@ from .. import db
 from src.forms import RegistrationForm, ViewUserProfileForm, CreatePostForm
 from src.model.schemas import Attributes, Team, Post, Bookmarks
 from src.model import schemas
-from src.controller.user import User
+from src.controller.user import User, UserSchema
 
 from src.utility import schedule
 from src.utility.email import ManageEmailTemplate
@@ -23,27 +24,38 @@ from src import login_manager, mail
 from flask_login import current_user, login_required, login_user, logout_user
 from src.utility import blogsview
 
-user_bp = Blueprint('user', __name__)
+# BLUEPRINT
+user_bp = Blueprint("user", __name__)
+
 
 @user_bp.route("/user/new-user/create-account/", methods=["GET", "POST"])
 def create_account_page():
+    schema = UserSchema()
     signup_form = UserCreateAccountForm()
     if request.method == "POST":
         if signup_form.validate_on_submit():
-            create_user = schemas.User(
-                username=signup_form.username.data,
-                first_name= 'Jane',
-                # signup_form.first_name.data,
-                last_name= 'Doe',
-                # signup_form.last_name.data,
-                date_of_birth='19-20-2022',
-                # signup_form.date_of_birth.data,
-                email=signup_form.email.data,
-                password=signup_form.password1.data,
-            )
-            db.session.add(create_user)
+            # Create user using orm.
+            # create_user = schemas.User(
+            #     username=signup_form.username.data,
+            #     first_name=signup_form.first_name.data,
+            #     last_name=signup_form.last_name.data,
+            #     date_of_birth=signup_form.date_of_birth.data,
+            #     email=signup_form.email.data,
+            #     password = signup_form.password1.data
+            # )
+            # create user using schema and then deseralize data 
+            create_user = {
+                'username':signup_form.username.data,
+                'first_name':signup_form.first_name.data,
+                'last_name':signup_form.last_name.data,
+                'date_of_birth': '2022-08-12',
+                'email':signup_form.email.data,
+                'password': signup_form.password1.data
+            }
+            deserialize = schema.load(create_user)
+            db.session.add(deserialize)
             db.session.commit()
-            
+
             # person = ManageEmailTemplate(
             #     username=signup_form.username.data,
             #     email=signup_form.email,
@@ -64,8 +76,8 @@ def create_account_page():
         if signup_form.errors != {}:
             for err_msg in signup_form.errors:
                 flash(f"Oops We got a problem {err_msg}", category="danger")
-                return redirect(url_for('user.create_account_page'))
-                
+                return redirect(url_for("user.create_account_page"))
+
     return render_template("auth/create-account.html", signup_form=signup_form)
 
 
@@ -97,13 +109,14 @@ def login_page():
                 )
             else:
                 flash(f"Username and password does not match.", category="danger")
-                return redirect(url_for('user.login_page'))
+                return redirect(url_for("user.login_page"))
         else:
             flash("Something unexpected  happened, please try again")
-            return redirect(url_for('user.login_page'))
+            return redirect(url_for("user.login_page"))
     else:
         # if request is GET
         return render_template("auth/login.html", login_form=login_form)
+
 
 @user_bp.route("/logout/")
 def logout_page():
@@ -111,6 +124,7 @@ def logout_page():
     return redirect(
         url_for("home.home_page", user="logged-out", content_type="available-teams")
     )
+
 
 @user_bp.route("/user/register/", methods=["POST", "GET"])
 @login_required
@@ -154,21 +168,27 @@ def registration_page():
 
             # Send Registration Confirmation Email to User.
 
-            user = user.User.query.filter_by(id=current_user.id) 
+            user = user.User.query.filter_by(id=current_user.id)
             for item in user:
                 meta_data = {
-                    'team':register_form.team_name.data,
-                    'sport_registered': register_form.select_sport.data,
-                    'skills_level':register_form.experience.data
+                    "team": register_form.team_name.data,
+                    "sport_registered": register_form.select_sport.data,
+                    "skills_level": register_form.experience.data,
                 }
-                # create instance. 
-                template_name = ManageEmailTemplate(username=item.username,email=item.email, first_name=item.first_name, meta_data=meta_data, name='registration')
-                
+                # create instance.
+                template_name = ManageEmailTemplate(
+                    username=item.username,
+                    email=item.email,
+                    first_name=item.first_name,
+                    meta_data=meta_data,
+                    name="registration",
+                )
+
                 my_template_message = template_name.email_channel_composer()
-                
+
                 # send the email.
                 mail.send(my_template_message)
-            
+
             # future improvement => redirects user to the team page where he's registered
             # Can read team decription, view other players and maximum number of players.
         return redirect(
@@ -183,6 +203,8 @@ def registration_page():
         return render_template(
             "user/registration-form.html", register_form=register_form
         )
+
+
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     flash(
@@ -193,75 +215,90 @@ def unauthorized_callback():
 
 
 @user_bp.route("/user/user-profile/personal-data", methods=["POST", "GET"])
-@user_bp.route("/user/user-profile/posts-created", methods=['POST', 'GET'])
+@user_bp.route("/user/user-profile/posts-created", methods=["POST", "GET"])
 @login_required
 def view_user_profile():
     if request.method == "GET":
-        blogs = Post.query.filter_by(creator_id=current_user.id).all()
+        my_blogs = Post.query.filter_by(creator_id=current_user.id).all()
         favourite = Bookmarks.query.filter_by(liker_id=current_user.id).all()
-    
+
         if current_user.team_id != None:
             team = Team.query.filter_by(id=int(current_user.team_id)).first()
             sport = Attributes.query.filter_by(id=int(current_user.id)).first()
             post = Post.query.filter_by(creator_id=int(current_user.id)).count()
-            book = []
+            bookmarked_post = []
             for item in favourite:
                 fav_post = Post.query.filter_by(id=item.post_id).first()
-                book.append(fav_post)
-
+                bookmarked_post.append(fav_post)
         else:
             team = None
             sport = None
             post = None
+            bookmarked_post = None
         user_profile = ViewUserProfileForm()
+        # json_ones = jsonify({'user_profile': user_profile, 'team':team, 'sport': sport})
         return render_template(
             "user/user-profile.html",
             user_profile=user_profile,
             team=team,
             sport=sport,
             post=post,
-            blogs=blogs,
-            fav_post = book
+            blogs=my_blogs,
+            fav_post = bookmarked_post
         )
+
+
+# I want user to update their bio information.
+@user_bp.route("/user/user-profile/personal-data", methods=["POST", "GET"])
+@login_required
+def update_my_bio():
+    pass
+
+
 # implementing forgot password mechanism.
-@user_bp.route('/auth/user/forgot-password/check-email', methods=['GET', 'POST'])
+@user_bp.route("/auth/user/forgot-password/check-email", methods=["GET", "POST"])
 def ask_for_email_page():
-    '''
+    """
     This route, checks user by email, if the user is found, redirects to forgot_password_page.
 
-    '''
+    """
     check_email = CheckEmailForm()
     # First ask user email to verify if they exist in the database.
-    if request.method =='GET':
-        return render_template('auth/check-email.html', check_email=check_email)
+    if request.method == "GET":
+        return render_template("auth/check-email.html", check_email=check_email)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         if check_email.validate_on_submit():
             # check if user is in our database by email.
             x_user = User()
             res = x_user.find_user_by_email(check_email.email.data)
-            # if user email is found. 
+            # if user email is found.
             if res:
                 # redirect user to forgot_password page.
-                return redirect(url_for('user.forgot_password_page', user_email=check_email.email.data
-                ))
-            
+                return redirect(
+                    url_for(
+                        "user.forgot_password_page", user_email=check_email.email.data
+                    )
+                )
+
             else:
-                flash('Sorry we couldnt find that email. Please try again')
-                return render_template('auth/check-email.html', check_email=check_email)
-       
-@user_bp.route('/auth/user/forgot-password/<user_email>', methods=['POST', 'GET'])
+                flash("Sorry we couldnt find that email. Please try again")
+                return render_template("auth/check-email.html", check_email=check_email)
+
+
+@user_bp.route("/auth/user/forgot-password/<user_email>", methods=["POST", "GET"])
 def forgot_password_page(user_email):
     reset_form = ForgotPasswordForm()
-    if request.method == 'GET':
-        return render_template('auth/forgot-password.html', reset_form=reset_form)
-    
-    if request.method== 'POST':
+    if request.method == "GET":
+        return render_template("auth/forgot-password.html", reset_form=reset_form)
+
+    if request.method == "POST":
         x_user = User()
         res = x_user.find_user_by_email(user_email)
         res.reset_password(reset_form.password.data)
-       
-        flash('Your password was changed successful, please login to your account',category='success')
-        return redirect(
-            url_for('user.login_page')
+
+        flash(
+            "Your password was changed successful, please login to your account",
+            category="success",
         )
+        return redirect(url_for("user.login_page"))

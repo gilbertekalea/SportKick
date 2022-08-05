@@ -3,8 +3,10 @@ from src.utility import schedule
 from flask import Blueprint, render_template
 from src.controller import club
 from src.model import schemas
+
 # SCHEDULE BLUEPRINT
-sched_bp = Blueprint('schedule', '__name__', template_folder='templates')
+sched_bp = Blueprint("schedule", "__name__", template_folder="templates")
+
 
 @sched_bp.route("/schedule/")
 def schedule_page():
@@ -15,7 +17,7 @@ def schedule_page():
     # for item in teams:
     #     item = item.strip()
     #     team = ClubName.query.filter_by(name=item + " " + "Soccer Club").first()
-        # team.update_schedule_id(team.id)
+    # team.update_schedule_id(team.id)
 
     fixtures = payload[0]
     main_fixture = []
@@ -27,9 +29,8 @@ def schedule_page():
             # split the two teams playing and use index 1 team to find their stadium name
             # used as a venue for hosting the game
 
-            home_team = fixtures[i][j].split("vs") # extract home team stadiums,
-           
-        
+            home_team = fixtures[i][j].split("vs")  # extract home team stadiums,
+
             t = club.ClubName()
             stad = t.get_club_stadium(home_team[0].strip())
             fixture["fixture"] = fixtures[i][j]
