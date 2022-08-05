@@ -22,7 +22,8 @@ from flask_login import current_user, login_required, login_user, logout_user
 from src.utility import blogsview
 
 
-blog_bp = Blueprint('blog', __name__, template_folder='templates')
+blog_bp = Blueprint("blog", __name__, template_folder="templates")
+
 
 @blog_bp.route("/blog/homepage/", methods=["POST", "GET"])
 @login_required
@@ -34,7 +35,7 @@ def blog_page():
         .order_by(Post.date_created)
         .limit(2)
     )
-    
+
     # all blogs
     all_blogs = blogsview.blog()
 
@@ -48,7 +49,7 @@ def blog_page():
         )  # value = 1; used to increase likes count/ bookmarks
         # the current post clicked or bookmarked by user.
         postid = request.form.get("current_post_id")
-       
+
         if like == "1":
             # ? retrieve all occurances of the current post from the database.
             current_post = Post.query.filter_by(id=int(postid)).first()
@@ -62,7 +63,10 @@ def blog_page():
             # ?We need to verify that the current_post has been bookmarked or liked the current_user.
             for item in book_mark:
                 if item.liker_id == current_user.id:
-                    flash("You already liked this post", category="info animate__animated animate__flash")
+                    flash(
+                        "You already liked this post",
+                        category="info animate__animated animate__flash",
+                    )
                     return redirect(url_for("blog.blog_page"))
 
             else:
@@ -75,7 +79,7 @@ def blog_page():
                 this_post.update_likes(like)
                 flash("You have liked this post", category="success")
                 return redirect(url_for("blog_page"))
-            
+
         else:
             create_post = Post(
                 post_title=content.post_title.data,

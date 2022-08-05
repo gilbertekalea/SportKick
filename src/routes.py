@@ -26,6 +26,7 @@ def home_page():
     available_teams = Team.query.all()
     return render_template("home-page.html", available_teams=available_teams)
 
+
 # @app.route("/auth/create-account/", methods=["GET", "POST"])
 # def create_account_page():
 #     signup_form = UserCreateAccountForm()
@@ -41,7 +42,7 @@ def home_page():
 #             )
 #             db.session.add(create_user)
 #             db.session.commit()
-            
+
 #             person = ManageEmailTemplate(
 #                 username=signup_form.username.data,
 #                 email=signup_form.email,
@@ -64,7 +65,6 @@ def home_page():
 #                 flash(f"Oops We got a problem {err_msg}", category="danger")
 
 #     return render_template("auth/create-account.html", signup_form=signup_form)
-
 
 
 # @app.route("/auth/login/", methods=["POST", "GET"])
@@ -149,22 +149,22 @@ def home_page():
 #             db.session.commit()
 
 #             # Send Confirmation Email to User. returns a list object.
-            
-#             user = User.query.filter_by(id=current_user.id) 
+
+#             user = User.query.filter_by(id=current_user.id)
 #             for item in user:
 #                 meta_data = {
 #                     'team':register_form.team_name.data,
 #                     'sport_registered': register_form.select_sport.data,
 #                     'skills_level':register_form.experience.data
 #                 }
-#                 # create instance. 
+#                 # create instance.
 #                 template_name = ManageEmailTemplate(username=item.username,email=item.email, first_name=item.first_name, meta_data=meta_data, name='registration')
-                
+
 #                 my_template_message = template_name.email_channel_composer()
-                
+
 #                 # send the email.
 #                 mail.send(my_template_message)
-            
+
 #             # future improvement => redirects user to the team page where he's registered
 #             # Can read team decription, view other players and maximum number of players.
 #         return redirect(
@@ -180,6 +180,7 @@ def home_page():
 #             "user/registration-form.html", register_form=register_form
 #         )
 
+
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     flash(
@@ -190,14 +191,13 @@ def unauthorized_callback():
 
 
 @app.route("/user/user-profile/personal-data", methods=["POST", "GET"])
-@app.route("/user/user-profile/posts-created", methods=['POST', 'GET'])
-
+@app.route("/user/user-profile/posts-created", methods=["POST", "GET"])
 @login_required
 def view_user_profile():
     if request.method == "GET":
         blogs = Post.query.filter_by(creator_id=current_user.id).all()
         favourite = Bookmarks.query.filter_by(liker_id=current_user.id).all()
-    
+
         if current_user.team_id != None:
             team = Team.query.filter_by(id=int(current_user.team_id)).first()
             sport = Attributes.query.filter_by(id=int(current_user.id)).first()
@@ -219,8 +219,9 @@ def view_user_profile():
             sport=sport,
             post=post,
             blogs=blogs,
-            fav_post = book
+            fav_post=book,
         )
+
 
 @app.route("/blog/homepage/", methods=["POST", "GET"])
 @login_required
@@ -232,7 +233,7 @@ def blog_page():
         .order_by(Post.date_created)
         .limit(2)
     )
-    
+
     # all blogs
     all_blogs = blogsview.blog()
 
@@ -246,7 +247,7 @@ def blog_page():
         )  # value = 1; used to increase likes count/ bookmarks
         # the current post clicked or bookmarked by user.
         postid = request.form.get("current_post_id")
-       
+
         if like == "1":
             # ? retrieve all occurances of the current post from the database.
             current_post = Post.query.filter_by(id=int(postid)).first()
@@ -260,7 +261,10 @@ def blog_page():
             # ?We need to verify that the current_post has been bookmarked or liked the current_user.
             for item in book_mark:
                 if item.liker_id == current_user.id:
-                    flash("You already liked this post", category="info animate__animated animate__flash")
+                    flash(
+                        "You already liked this post",
+                        category="info animate__animated animate__flash",
+                    )
                     return redirect(url_for("blog_page"))
 
             else:
@@ -273,7 +277,7 @@ def blog_page():
                 this_post.update_likes(like)
                 flash("You have liked this post", category="success")
                 return redirect(url_for("blog_page"))
-            
+
         else:
             create_post = Post(
                 post_title=content.post_title.data,
