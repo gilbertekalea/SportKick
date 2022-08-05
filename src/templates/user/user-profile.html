@@ -1,5 +1,4 @@
 {% extends 'base.html' %} {% block title %} {% endblock %} {% block content %}
-
 <body>
     <div class="container">
         <div class="row">
@@ -39,9 +38,14 @@
             {% include 'includes/account.html' %}
             {% include 'includes/blogs.html' %}
             {%include 'includes/favourite.html' %}
-
+    
             <script>
-                // Event to handle how vertical tabs- tio display user information.
+                
+                // const user_url = {{url_for("user.view_user_profile", id = current_user.id) | tojson }}
+                
+                // console.log(user_url)
+
+                // Event to handle how vertical tabs- to display user information.
                 let userData = document.getElementById('section-account');
                 let blog = document.getElementById('section-blogs');
                 let fav = document.getElementById('section-fav')
