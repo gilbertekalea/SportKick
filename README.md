@@ -1,4 +1,4 @@
-# Sporty.com Web App
+# SportKick
 Sporty is a web application where users can find and register for recreational local sport clubs. Users can create posts, bookmarked their favourite blogs. 
 
 ## Goal of the Project:
