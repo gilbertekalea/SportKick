@@ -249,16 +249,16 @@ def blog_page():
         postid = request.form.get("current_post_id")
 
         if like == "1":
-            # ? retrieve all occurances of the current post from the database.
+            # retrieve all occurances of the current post from the database.
             current_post = Post.query.filter_by(id=int(postid)).first()
 
-            # ? CHECK if current_user and currentpost has been bookedmarked
-            # ? Return the bookmarked posts where post_id equals current_post id. The post user clicked.
+            # CHECK if current_user and currentpost has been bookedmarked
+            # Return the bookmarked posts where post_id equals current_post id. The post user clicked.
             book_mark = Bookmarks.query.filter_by(post_id=current_post.id).all()
 
             #! VALIDATION
-            # ? Before taking any actions such as updating the like count;
-            # ?We need to verify that the current_post has been bookmarked or liked the current_user.
+            # Before taking any actions such as updating the like count;
+            # We need to verify that the current_post has been bookmarked or liked the current_user.
             for item in book_mark:
                 if item.liker_id == current_user.id:
                     flash(

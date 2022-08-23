@@ -7,9 +7,17 @@ Next Features for my project:
 3. Create a Schedule entity, league table(with relevant features to support a fully functional)
 4. Create Flow chart, entity relationship and data flow diagrams
 5. Focus on error handling -> very important. 
+6. Change sign up form, reduce amount of information a user enters.
 -------
 Completed:
 --
 1. Reset password
 2. Add a team functionality
 3.
+
+---
+04/08/2022
+----
+Create_account_feature
+Problem: The problem with initial design was that user were asked many inputs. The truth is, users do not need to enter alot information to create account,
+they can update this info later. Solution to this is redesign sign up page where users are asked to enter their username, email and password. After sign up, they can update their profile as they like.

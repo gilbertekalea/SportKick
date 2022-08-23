@@ -15,10 +15,9 @@ class TeamSchema(Schema):
 
     @post_load
     def make_team(self, data, **kwargs):
-        return ClubName(**data)
+        return Team(**data)
 
-class ClubName(schemas.Team):
-
+class Team(schemas.Team):
     def drop_team(self, team_name):
         team_obj = self.query.filter_by(name=team_name).first()
         del team_obj
@@ -41,8 +40,7 @@ class ClubName(schemas.Team):
 
     @staticmethod
     def convert_to_json():
-        teams = ClubName.query.all()
-
+        teams = Team.query.all()
         jsonify_teams = []
         for obj in teams:
             team = {}

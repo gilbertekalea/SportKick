@@ -3,7 +3,7 @@ from importlib_metadata import method_cache
 from .. import db
 from flask_login import current_user, login_required, login_user, logout_user
 from src.forms import AddSportTeam
-from src.controller.club import ClubName, TeamSchema
+from src.controller.club import Team, TeamSchema
 from src.model import schemas
 
 team_bp = Blueprint("add_team", __name__, template_folder="templates")

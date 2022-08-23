@@ -1,3 +1,4 @@
+from asyncio.log import logger
 from flask import Blueprint
 import datetime, json
 from email.generator import DecodedGenerator
@@ -18,11 +19,11 @@ from src.model.schemas import Attributes, Team, Post, Bookmarks
 from src.model import schemas
 from src.controller.user import User, UserSchema
 
-from src.utility import schedule
+# from src.utility import schedule
 from src.utility.email import ManageEmailTemplate
 from src import login_manager, mail
 from flask_login import current_user, login_required, login_user, logout_user
-from src.utility import blogsview
+# from src.utility import blogsview
 
 # BLUEPRINT
 user_bp = Blueprint("user", __name__)
@@ -167,27 +168,29 @@ def registration_page():
             db.session.commit()
 
             # Send Registration Confirmation Email to User.
+            try:
+                user = user.User.query.filter_by(id=current_user.id)
+                for item in user:
+                    meta_data = {
+                        "team": register_form.team_name.data,
+                        "sport_registered": register_form.select_sport.data,
+                        "skills_level": register_form.experience.data,
+                    }
+                    # create instance.
+                    template_name = ManageEmailTemplate(
+                        username=item.username,
+                        email=item.email,
+                        first_name=item.first_name,
+                        meta_data=meta_data,
+                        name="registration",
+                    )
 
-            user = user.User.query.filter_by(id=current_user.id)
-            for item in user:
-                meta_data = {
-                    "team": register_form.team_name.data,
-                    "sport_registered": register_form.select_sport.data,
-                    "skills_level": register_form.experience.data,
-                }
-                # create instance.
-                template_name = ManageEmailTemplate(
-                    username=item.username,
-                    email=item.email,
-                    first_name=item.first_name,
-                    meta_data=meta_data,
-                    name="registration",
-                )
+                    my_template_message = template_name.email_channel_composer()
 
-                my_template_message = template_name.email_channel_composer()
-
-                # send the email.
-                mail.send(my_template_message)
+                    # send the email.
+                    mail.send(my_template_message)
+            except Exception as e:
+                print('Sorry we cant do it')
 
             # future improvement => redirects user to the team page where he's registered
             # Can read team decription, view other players and maximum number of players.
@@ -218,6 +221,7 @@ def unauthorized_callback():
 @user_bp.route("/user/user-profile/posts-created", methods=["POST", "GET"])
 @login_required
 def view_user_profile():
+    user_profile = ViewUserProfileForm()
     if request.method == "GET":
         my_blogs = Post.query.filter_by(creator_id=current_user.id).all()
         favourite = Bookmarks.query.filter_by(liker_id=current_user.id).all()
@@ -230,14 +234,7 @@ def view_user_profile():
             for item in favourite:
                 fav_post = Post.query.filter_by(id=item.post_id).first()
                 bookmarked_post.append(fav_post)
-        else:
-            team = None
-            sport = None
-            post = None
-            bookmarked_post = None
-        user_profile = ViewUserProfileForm()
-        # json_ones = jsonify({'user_profile': user_profile, 'team':team, 'sport': sport})
-        return render_template(
+            return render_template(
             "user/user-profile.html",
             user_profile=user_profile,
             team=team,
@@ -246,6 +243,29 @@ def view_user_profile():
             blogs=my_blogs,
             fav_post = bookmarked_post
         )
+        else:
+            team = {
+                'name': 'N/A'
+            }
+            sport = {
+                'sports_registered':'N/A',
+                'skills_level' :'N/A'
+                }
+            post = 0
+    
+            return render_template(
+            "user/user-profile.html",
+            user_profile=user_profile,
+            team=team,
+            sport=sport,
+            post=post,
+            blogs=my_blogs,
+            # fav_post = bookmarked_post
+            )
+            
+
+        # json_ones = jsonify({'user_profile': user_profile, 'team':team, 'sport': sport})
+        
 
 
 # I want user to update their bio information.
@@ -284,7 +304,6 @@ def ask_for_email_page():
             else:
                 flash("Sorry we couldnt find that email. Please try again")
                 return render_template("auth/check-email.html", check_email=check_email)
-
 
 @user_bp.route("/auth/user/forgot-password/<user_email>", methods=["POST", "GET"])
 def forgot_password_page(user_email):
