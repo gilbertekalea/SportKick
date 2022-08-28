@@ -29,7 +29,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 user_bp = Blueprint("user", __name__)
 
 
-@user_bp.route("/user/new-user/create-account/", methods=["GET", "POST"])
+@user_bp.route("/user/create-account", methods=["GET", "POST"])
 def create_account_page():
     schema = UserSchema()
     signup_form = UserCreateAccountForm()
@@ -56,15 +56,15 @@ def create_account_page():
             deserialize = schema.load(create_user)
             db.session.add(deserialize)
             db.session.commit()
-
-            # person = ManageEmailTemplate(
-            #     username=signup_form.username.data,
-            #     email=signup_form.email,
-            #     first_name=signup_form.first_name,
-            #     name='account-creation'
-            # )
-            # email_template = person.email_channel_composer()
-            # mail.send(email_template)
+            # send email confirmation about the user
+            person = ManageEmailTemplate(
+                username=signup_form.username.data,
+                email=signup_form.email,
+                first_name=signup_form.first_name,
+                name='account-creation'
+            )
+            email_template = person.email_channel_composer()
+            mail.send(email_template)
 
             flash(
                 f"Congratulations!: {signup_form.username.data}, Your Account has been created.",
@@ -82,7 +82,7 @@ def create_account_page():
     return render_template("auth/create-account.html", signup_form=signup_form)
 
 
-@user_bp.route("/auth/login/", methods=["POST", "GET"])
+@user_bp.route("/auth/login", methods=["POST", "GET"])
 def login_page():
     login_form = UserLoginForm()
     if request.method == "POST":
@@ -97,7 +97,7 @@ def login_page():
             ):
                 login_user(attempted_user)
                 flash(
-                    f"You are logged in as {attempted_user.username}",
+                    f'You are logged in as {attempted_user.username}',
                     category="success",
                 )
                 return redirect(
@@ -116,10 +116,14 @@ def login_page():
             return redirect(url_for("user.login_page"))
     else:
         # if request is GET
+        # if current_user:
+        #     flash('You are login', category='info')
+        #     return redirect(url_for('home.home_page'))
+        # else:
         return render_template("auth/login.html", login_form=login_form)
 
 
-@user_bp.route("/logout/")
+@user_bp.route("/logout")
 def logout_page():
     logout_user()
     return redirect(
@@ -127,7 +131,7 @@ def logout_page():
     )
 
 
-@user_bp.route("/user/register/", methods=["POST", "GET"])
+@user_bp.route("/user/register", methods=["POST", "GET"])
 @login_required
 def registration_page():
     register_form = RegistrationForm()
@@ -217,8 +221,8 @@ def unauthorized_callback():
     return render_template("user/registration-form.html")
 
 
-@user_bp.route("/user/user-profile/personal-data", methods=["POST", "GET"])
-@user_bp.route("/user/user-profile/posts-created", methods=["POST", "GET"])
+@user_bp.route("/user/profile", methods=["POST", "GET"])
+@user_bp.route("/user/profile/post-created", methods=["POST", "GET"])
 @login_required
 def view_user_profile():
     user_profile = ViewUserProfileForm()
@@ -269,14 +273,14 @@ def view_user_profile():
 
 
 # I want user to update their bio information.
-@user_bp.route("/user/user-profile/personal-data", methods=["POST", "GET"])
+@user_bp.route("/user/update-profile", methods=["POST", "GET"])
 @login_required
 def update_my_bio():
     pass
 
 
 # implementing forgot password mechanism.
-@user_bp.route("/auth/user/forgot-password/check-email", methods=["GET", "POST"])
+@user_bp.route("/user/check-email", methods=["GET", "POST"])
 def ask_for_email_page():
     """
     This route, checks user by email, if the user is found, redirects to forgot_password_page.
@@ -305,7 +309,7 @@ def ask_for_email_page():
                 flash("Sorry we couldnt find that email. Please try again")
                 return render_template("auth/check-email.html", check_email=check_email)
 
-@user_bp.route("/auth/user/forgot-password/<user_email>", methods=["POST", "GET"])
+@user_bp.route("/user/change-password/<user_email>", methods=["POST", "GET"])
 def forgot_password_page(user_email):
     reset_form = ForgotPasswordForm()
     if request.method == "GET":

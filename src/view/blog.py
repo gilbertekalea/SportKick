@@ -24,8 +24,7 @@ from src.utility import blogsview
 
 blog_bp = Blueprint("blog", __name__, template_folder="templates")
 
-
-@blog_bp.route("/blog/homepage/", methods=["POST", "GET"])
+@blog_bp.route("/blog/homepage", methods=["POST", "GET"])
 @login_required
 def blog_page():
     content = CreatePostForm()

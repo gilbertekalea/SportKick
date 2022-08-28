@@ -1,47 +1,63 @@
-{% extends 'base.html' %} {% block title %} Home {% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} Home {% endblock %} 
 
-<body class="text-center">
+<!-- inherit body elements from base -->
+{% block content %}
     <main>
-        <section class="py-5 text-center container-fluid" id='home-page-section'>
-            <div class="row py-lg-5">
-                <div class="col-lg-6 col-md-8 mx-auto" style='background-color: rgba(245, 245, 245, 0.312);'>
-                    <h1 class="fw-light mb-3" id="h"></h1>
+        <section class="py-5 text-center" id='stadium-background'>
+            <div class="container">
+                <div class="row py-lg-5">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <h1 class="fw-light mb-3 fw-bolder mt-4" id="typing"  style="font-family: 'Merriweather', serif;color:rgba(254, 154, 23, 0.941)"></h1>
+                        <p class="lead text-white-50 fw-lighter mx-1 "  style="font-family: 'Merriweather', serif">
+                            <span class="fw-bolder" style="font-family: 'Merriweather', serif;color:rgba(254, 154, 23, 0.941)">SPORKICK</span>
+                            is a web application where you can find <br>
+                            and register for re-creational local sport clubs. <br>
+                            You can create blog, register for clubs and more.
+                        </p>
+                        <p class="mt-5">
+                            <a href="#availableTeams" class="btn btn-outline-dark text-white-50 fw-bold my-2">View Teams</a>
+                            {% if current_user.is_authenticated %}
+                            <a href="{{url_for('blog.blog_page')}}" class="btn btn-outline-dark text-white-50 fw-bold my-2">View Blogs</a>
+                            <a href="{{url_for('user.registration_page')}}" class="btn btn-outline-dark text-white-50 fw-bold my-2">Register</a>
+                            
+                            {% else %}
+                            <a href="{{url_for('user.login_page')}}" class="btn btn-outline-dark text-white-50 fw-bold my-2">Log In</a>
+                            <a href="{{url_for('user.create_account_page')}}" class="btn btn-outline-dark text-white-50 fw-bold my-2">Register</a>
+                            {% endif %}
+                            <!-- <a href="{{url_for('user.create_account_page')}}"class="btn btn-outline-dark text-white-50 fw-bold my-2">Register</a> -->
+                        </p>
+                        <script>
+                            let para = document.getElementById('typing');
+                            let text = 'SPORTKICK';
+                            let typingSpeed = 20;
+                            
+                            let charIndex = 0;
 
-                    <p class="lead">
-                        Something short and leading about the collection below—its contents, the creator,
-                        etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-                    <p>
-                        <a href="#availableTeams" class="btn btn-primary my-2">Team Profiles</a>
-                        <!-- <a href="#" class="btn btn-secondary my-2">Secondary action</a> -->
-                    </p>
-                    <script>
-                        let para = document.getElementById('h');
-                        let text = 'Welcome to sport.com';
-                        let typingSpeed = 50;
-                        
-                        let charIndex = 0;
+                            function startTyping(){
+                                if(charIndex <= text.length){
+                                    document.getElementById('typing').innerHTML +=text.charAt(charIndex);
+                                    charIndex++;
+                                    setTimeout(startTyping, typingSpeed);
+                                    typingSpeed++;
 
-                        function startTyping(){
-                            if(charIndex <= text.length){
-                                document.getElementById('h').innerHTML +=text.charAt(charIndex);
-                                charIndex++
-                                setTimeout(startTyping, typingSpeed);
+                                }
+        
                             }
+                            setInterval(window.addEventListener('DOMContentLoaded', function () {
+                                startTyping()
                         
-                        }
-                        setInterval(window.addEventListener('DOMContentLoaded', function () {
-                            startTyping()
-
-                        }), 1000)
-                    </script>
+                            }), 1000)
+                            
+                        </script>
+                    </div>
                 </div>
-            </div>
+        </div>
         </section>
         <!-- dsplay available teams for registration. -->
         <section id="team-display">
-            <div class="album py-5 bg-light">
+            <div class="album py-5 bg-light" id="available-teams">
                 <div class="container">
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id='availableTeams'>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id='available-teams'>
                         {% for item in available_teams %} {% include 'includes/team-more-info.html' %}
                         <div class="col">
                             <div class="card shadow-sm bg-body rounded h-100">
@@ -91,5 +107,4 @@
             </div>
         </section>
     </main>
-</body>
 {% endblock %}

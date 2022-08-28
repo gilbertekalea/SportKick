@@ -5,34 +5,32 @@ Registration
 {% endblock%}
 
 {% block content %}
-
-<body>
+<main>
     <div class="container">
         {% if current_user.is_authenticated %}
-        <div class='row'>
-            <div class="col-lg-8 col-md-6 col-sm-12"
-                style="border-right: 10px solid rgba(0, 0, 0, 0.36);margin-top:30px">
-                <form method='POST' class="form-rigister">
+        <div class='row justify-content-center'>
+            <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
+                <form method='POST' class="form-rigister mt-5 font-monospace fs-6">
                     {{register_form.hidden_tag()}}
-                    <h1 class='text-danger font-weight-bold font-weight-normal'>Sport Registration Form </h1>
-                    <br>
+                    <h1 class='text-danger font-weight-bold fw-bolder font-monospace' >Sport Registration Form </h1>
+                    <hr>
                     <input id='current_username' name='username' type='hidden' value='{{current_user.username}}'>
-                    <div class='mb-3'>
+                    <div class='mb-1'>
                         {{register_form.first_name.label(class="form-label")}}
                         {{register_form.first_name(class="form-control",autocomplete='off',placeholder='First Name',
                         value=current_user.first_name)}}
                     </div>
-                    <div class='mb-3'>
+                    <div class='mb-1'>
                         {{register_form.last_name.label(class="form-label")}}
                         {{register_form.last_name(class="form-control",autocomplete='off',placeholder='Last Name',
                         value=current_user.last_name)}}
                     </div>
-                    <div class='mb-3'>
+                    <div class='mb-1'>
                         {{register_form.team_name.label(class="form-label")}}
                         {{register_form.team_name(class="form-control",autocomplete='off',placeholder='Team Name')}}
                     </div>
 
-                    <div class='mb-3'>
+                    <div class='mb-1'>
                         {{register_form.select_sport.label(class="form-label")}}
                         {{register_form.select_sport(class="form-control")}}
                     </div>
@@ -40,7 +38,7 @@ Registration
                         {{register_form.experience.label(class="form-label")}}
                         {{register_form.experience(class="form-control")}}
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-1">
                         {{register_form.submit(class='btn btn-sm btn-block btn-success')}}
                     </div>
                 </form>
@@ -71,5 +69,5 @@ Registration
         </div>
         {% endif %}
     </div>
-</body>
+</main>
 {% endblock %}

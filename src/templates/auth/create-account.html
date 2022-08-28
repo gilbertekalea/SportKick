@@ -1,12 +1,12 @@
 {%extends 'base.html'%} {% block title %} Signup {% endblock %} {% block content %}
 
 <body>
-    <div class="container">
-        <form method="POST" class="form-rigister" style="margin-top: 10px; margin-left: 20px">
+    <div class="container mt-5">
+        <form method="POST" class="form-rigister mt-5 font-monospace" style="margin-top: 10px; margin-left: 20px">
             <div class="row justify-content-center">
-                <div class="col-lg-5 col-md-6 col-sm-12">
+                <div class="col-lg-5 col-md-6 col-sm-12 mt-4">
                     {{signup_form.hidden_tag()}}
-                    <h3 class="text-dark font-weight-normal">Create Account</h3>
+                    <h3 class="text-dark fw-bold fs-4 font-monospace ">Create Account</h3>
                     <hr>
                     <div class="mb-3">
                         {{signup_form.username.label(class="form-label")}}

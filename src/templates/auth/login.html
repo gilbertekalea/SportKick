@@ -1,43 +1,39 @@
 {% extends 'base.html' %}
 
 {% block title %}
-
+login 
 {% endblock %}
 
 {% block content %}
-
-<body>
-   <div class="container">
-      <div class='row justify-content-center'>
+<main>
+   <div class="container-fluid mt-5">
+      <div class='row justify-content-center' >
          <div class="col-lg-4 col-md-6 col-sm-12" style="margin-top:50px">
             <form method='POST' class="form-rigister">
                {{login_form.hidden_tag()}}
-               <h1 class='text-danger font-weight-bold font-weight-normal'>Login: </h1>
-               <br>
-               <div class='mb-2'>
+               <h1>
+                  <span class="fw-bolder badge" style="font-family: 'Merriweather', serif;color:rgba(254, 154, 23, 0.941)">SPORKICK</span>
+               </h1>
+               <div class='mb-2 font-monospace'>
                   {{login_form.username.label(class="form-label")}}
                   {{login_form.username(class="form-control", autocomplete='off', placeholder='Username')}}
                </div>
-               <div class='mb-2'>
+
+               <div class='mb-2 font-monospace'>
                   {{login_form.password.label(class="form-label")}}
                   {{login_form.password(class="form-control", placeholder='Password')}}
                </div>
-               <div class="mb-2">
-                  {{login_form.submit(class='btn btn-sm btn-block btn-success')}}
+
+               <div class="mt-4 mb-5 font-monospace d-flex">
+                  <p><a class="btn btn-sm btn-block btn-primary me-2" href="{{url_for('user.create_account_page')}}">Create Account</a></p>
+                  <p><a class="btn btn-sm btn-block btn-primary me-2" href="{{url_for('user.ask_for_email_page')}}">Reset Password</a>
+                  <p>{{login_form.submit(class='btn btn-sm btn-block btn-primary')}}</p>
+                 
                </div>
             </form>
          </div>
-         <hr>
-               <div class="mb-3">
-                  <p class="font-monospace">You have no account with us? <a class="" href="{{url_for('user.create_account_page')}}">Create Account</a>
-                  </p>
-               </div>
-                <div class="mb-3">
-                  <p class="font-monospace">You have no account with us? <a class="" href="{{url_for('user.ask_for_email_page')}}">Reset Password</a>
-                  </p>
-               </div>
       </div>
    </div>
-</body>
+</main>
 {% endblock %}
 

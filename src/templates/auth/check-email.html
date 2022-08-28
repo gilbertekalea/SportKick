@@ -6,11 +6,11 @@
 {% endblock %}
 
 {% block content %}  
-
-<div class="container mb-3">
-        <div class="row justify-content-center">
-            <div class="col-lg-4 pb-4 mt-5">
-                <h5>Please enter your email, then click continue</h5>
+<main>
+    <div class="container">
+        <div class="row justify-content-center mt-5 font-monospace">
+            <div class="col-lg-5 pb-4 mt-5">
+                <p>Please enter your email to continue.</p>
                 <form method="post">
                     {{check_email.hidden_tag()}}
                     <div class="form-group mb-3">
@@ -23,7 +23,7 @@
                 </form>
             </div>
         </div>
-
-</div>
+    </div>
+</main>
 
 {% endblock %}
