@@ -31,7 +31,7 @@ def schedule_page():
 
             home_team = fixtures[i][j].split("vs")  # extract home team stadiums,
 
-            t = club.ClubName()
+            t = club.Team()
             stad = t.get_club_stadium(home_team[0].strip())
             fixture["fixture"] = fixtures[i][j]
             fixture["venue"] = stad
