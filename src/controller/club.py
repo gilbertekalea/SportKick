@@ -35,8 +35,11 @@ class Team(schemas.Team):
 
     @classmethod
     def get_club_stadium(cls, name):
-        res = cls.query.filter_by(name=name).first()
-        return res.stadium
+        response = cls.query.filter_by(name=name).first()
+        if response == None:
+            return 'N/A'
+        else:
+            return response.stadium
 
     @staticmethod
     def convert_to_json():
