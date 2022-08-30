@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {% block title %} {% endblock %} {% block content %}
-<body>
+<main>
     <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="tab p-4" style="color:rgb(29, 29, 20)">
+        <div class="row mt-4">
+            <div class="col-md-3 font-monospace">
+                <div class="tab p-4 mt-5" style="color:rgb(29, 29, 20)">
                     <button class="btn btn-outline-primary border-0 btn-sm btn-block mb-1" type="button" id="account">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-person-lines-fill" viewBox="0 0 16 16">
@@ -70,6 +70,7 @@
                         }
                     })
                 }
+                
             </script>
 
         </div>
@@ -80,5 +81,5 @@
             cursor: pointer;
         }
     </style>
-    {% endblock %}
-</body>
+</main>
+{% endblock %}

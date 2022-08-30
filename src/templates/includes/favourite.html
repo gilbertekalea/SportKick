@@ -4,10 +4,10 @@
     <div class="">
         {% if current_user.is_authenticated %} {% for item in fav_post %}
         <div class="">
-            <div class="card shadow-sm p-3 mb-3 bg-body rounded h-100">
+            <div class="card shadow-sm p-3 mb-3 bg-body rounded h-100 font-monospace mt-5" style="font-size:small">
                 <div class="card-body">
-                    <h5 class="card-title font-weight-bold">{{item.post_title}}</h5>
-                    <h6 class="card-subtitle mb-2 text-primary">
+                    <h5 class="card-title fw-bold" style="font-size:medium">{{item.post_title}}</h5>
+                    <h6 class="card-subtitle text-primary" style="font-size:x-small">
                         {{item.date_created[:16]}}, Author:
                         <span style="color: rgb(255, 0, 221)">{{current_user.first_name}}</span>
                     </h6>

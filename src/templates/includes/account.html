@@ -1,9 +1,10 @@
+
 <div class="col-lg-8">
     <section id="section-account" class="tabcontent">
-        <form method="POST" class="form-rigister">
+        <form method="POST" class="form-rigister font-monospace fw-normal" style="font-size:small">
             {{user_profile.hidden_tag()}}
             <br>
-            <div class="ms-3">
+            <div class="ms-3 mt-5">
                 <h3 class="text-info">ACCOUNT INFORMATION</h3>
             </div>
             {% if current_user.is_authenticated %}
@@ -12,43 +13,43 @@
                 <div class="row ms-3">
                     <div class="col-lg-4 mb-3">
                         {{user_profile.id.label(class="form-label")}}
-                        {{user_profile.id(class="form-control", autocomplete='off',
+                        {{user_profile.id(class="form-control",style="font-size:small",autocomplete='off',
                         placeholder='Indentity',value=current_user.id)}}
                     </div>
                     <div class="col-lg-4 mb-3">
                         {{user_profile.username.label(class="form-label")}}
-                        {{user_profile.username(class="form-control",autocomplete='off',placeholder='User
+                        {{user_profile.username(class="form-control",style="font-size:small", autocomplete='off',placeholder='User
                         Name', value=current_user.username)}}
                     </div>
                 </div>
                 <div class="row ms-3">
                     <div class="col-lg-4 mb-3">
                         {{user_profile.first_name.label(class="form-label")}}
-                        {{user_profile.first_name(class="form-control",autocomplete='off',placeholder='Team
+                        {{user_profile.first_name(class="form-control",style="font-size:small",autocomplete='off',placeholder='Team
                         Name', value=current_user.first_name)}}
                     </div>
 
                     <div class="col-lg-4 mb-3">
                         {{user_profile.last_name.label(class="form-label")}}
-                        {{user_profile.last_name(class="form-control",autocomplete='off',placeholder='Team
+                        {{user_profile.last_name(class="form-control",style="font-size:small", autocomplete='off',placeholder='Team
                         Name', value=current_user.last_name)}}
                     </div>
                 </div>
                 <div class="row ms-3">
                     <div class="col-lg-4 mb-3">
                         {{user_profile.email.label(class="form-label")}}
-                        {{user_profile.email(class="form-control", value=current_user.email)}}
+                        {{user_profile.email(class="form-control",style="font-size:small",value=current_user.email)}}
                     </div>
                     <div class="col-lg-4 mb-3">
                         {{user_profile.date_of_birth.label(class="form-label")}}
-                        {{user_profile.date_of_birth(class="form-control",
+                        {{user_profile.date_of_birth(class="form-control",style="font-size:small",
                         value=current_user.date_of_birth)}}
                     </div>
                 </div>
                 <div class="row ms-3">
                     <div class="col-lg-4 mb-3">
                         {{user_profile.team.label(class="form-label")}}
-                        {{user_profile.team(class="form-control", value=team.name)}}
+                        {{user_profile.team(class="form-control", style="font-size:small", value=team.name)}}
                     </div>
                     <div class="col-lg-4 mb-3">
                         {{user_profile.sport.label(class="form-label")}}
@@ -70,16 +71,19 @@
             </fieldset>
             {% endif %}
             <button type="button" class="btn btn-outline-dark" id="btn-field">
-                <a href="#user-profile" class="text-black" style="text-decoration: none;">Edit my data</a>
+                Edit my data
             </button>
+            <input type="submit" id="subtn" style="display: none;">
         </form>
         <script>
             //Event to enable form fields to be editable.
-            let fieldset = document.getElementById('fieldset');
+            let fildset = document.getElementById('fieldset');
             let eventBtn = document.getElementById('btn-field');
+            let subBtn = document.getElementById('subtn');
             eventBtn.addEventListener('click', function (event) {
-                fieldset.removeAttribute('disabled');
-                this.innerHTML = 'Update'
+                this.setAttribute('style', 'display:none');
+                fildset.removeAttribute('disabled');
+                subBtn.setAttribute('style', 'display:visible');
             })
         </script>
     </section>

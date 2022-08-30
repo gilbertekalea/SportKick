@@ -219,10 +219,12 @@ def unauthorized_callback():
 
 
 @user_bp.route("/user/profile", methods=["POST", "GET"])
-@user_bp.route("/user/profile/post-created", methods=["POST", "GET"])
+# @user_bp.route("/user/profile/post-created", methods=["POST", "GET"])
 @login_required
 def view_user_profile():
     user_profile = ViewUserProfileForm()
+    if request.method == 'POST':
+        pass
     if request.method == "GET":
         my_blogs = Post.query.filter_by(creator_id=current_user.id).all()
         favourite = Bookmarks.query.filter_by(liker_id=current_user.id).all()

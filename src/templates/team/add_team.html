@@ -9,37 +9,41 @@ Add a Team
     <div class="container mt-5">
         <div class="row justify-content-center mt-5">
             <div class="col-lg-6 col-md-6 col-sm-12 mt-4 font-monospace fs-6">
-                <h4>
+                <h4 style="font-size: small" class="mt-3">
                 <span class="fw-bolder" style="font-family: 'Merriweather', serif;color:rgba(254, 154, 23, 0.941)">SPORKICK</span>
-                : Add New club </h4>
+                : Add New club</h4>
                 <hr>
-                <form method="POST" class="">
+                <p class="lead fw-normal" style="font-size:medium">
+                    We are looking for contributors to add information about local sport clubs. Please fill the form below.
+                </p>
+
+                <form method="POST" class="" style="font-size:small">
                     {{team_form.hidden_tag()}}
                     
                     <div class=" form-group mb-2">
                         {{team_form.name.label}}
-                        {{team_form.name(class="form-control")}}
+                        {{team_form.name(class="form-control", style="font-size:small")}}
                     </div>
                     <div class="form-group mb-2">
                         {{team_form.description.label}}
-                        {{team_form.description(class="form-control")}}
+                        {{team_form.description(class="form-control", style="font-size:small")}}
                     </div>
                     <div class="form-group mb-2">
                         {{team_form.sports.label}}
-                        {{team_form.sports(class="form-control")}}
+                        {{team_form.sports(class="form-control", style="font-size:small")}}
                     </div>
                     <div class="form-group mb-2">
                         {{team_form.year_formed.label}}
-                        {{team_form.year_formed(class="form-control")}}
+                        {{team_form.year_formed(class="form-control", style="font-size:small")}}
                     </div>
                     <div class="form-group mb-2">
                         {{team_form.location.label}}
-                        {{team_form.location(class="form-control")}}
+                        {{team_form.location(class="form-control", style="font-size:small")}}
             
                     </div>
                     <div class="form-group mb-2">
                         {{team_form.stadium.label}}
-                        {{team_form.stadium(class="form-control")}}
+                        {{team_form.stadium(class="form-control", style="font-size:small")}}
                     </div>
                     <div class="form-group mb-2">
                         {{team_form.submit(class='btn btn-sm btn-block btn-primary')}}
@@ -49,6 +53,5 @@ Add a Team
         </div>
     </div>
 </main>
-
 
 {% endblock %}
