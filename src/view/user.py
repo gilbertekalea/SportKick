@@ -81,7 +81,6 @@ def create_account_page():
 
     return render_template("auth/create-account.html", signup_form=signup_form)
 
-
 @user_bp.route("/auth/login", methods=["POST", "GET"])
 def login_page():
     login_form = UserLoginForm()
@@ -130,12 +129,10 @@ def logout_page():
         url_for("home.home_page", user="logged-out", content_type="available-teams")
     )
 
-
 @user_bp.route("/user/register", methods=["POST", "GET"])
 @login_required
 def registration_page():
     register_form = RegistrationForm()
-
     if request.method == "POST":
         # get's current user
         logged_user = request.form.get("username")
