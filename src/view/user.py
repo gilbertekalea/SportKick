@@ -31,19 +31,13 @@ user_bp = Blueprint("user", __name__)
 
 @user_bp.route("/user/create-account", methods=["GET", "POST"])
 def create_account_page():
+    '''
+    Route to handle user account creation
+    '''
     schema = UserSchema()
     signup_form = UserCreateAccountForm()
     if request.method == "POST":
         if signup_form.validate_on_submit():
-            # Create user using orm.
-            # create_user = schemas.User(
-            #     username=signup_form.username.data,
-            #     first_name=signup_form.first_name.data,
-            #     last_name=signup_form.last_name.data,
-            #     date_of_birth=signup_form.date_of_birth.data,
-            #     email=signup_form.email.data,
-            #     password = signup_form.password1.data
-            # )
             # create user using schema and then deseralize data 
             create_user = {
                 'username':signup_form.username.data,
@@ -63,8 +57,8 @@ def create_account_page():
                 first_name=signup_form.first_name,
                 name='account-creation'
             )
-            email_template = person.email_channel_composer()
-            mail.send(email_template)
+            # email_template = person.email_channel_composer()
+            # mail.send(email_template)
 
             flash(
                 f"Congratulations!: {signup_form.username.data}, Your Account has been created.",
@@ -217,14 +211,32 @@ def unauthorized_callback():
     )
     return render_template("user/registration-form.html")
 
+@user_bp.route("/user/profile", methods=["POST"])
+@login_required
+def update_profile():
+    user_profile = ViewUserProfileForm()
+    # 
+    if request.method == 'POST':
+        user_id = request.form.get('id')
+        cur_user = User.query.filter_by(id=user_id).first()
+        updated_data = {
+            'id': user_profile.id.data,
+            'username': user_profile.username.data,
+            'first_name': user_profile.first_name.data,
+            'last_name': user_profile.last_name.data,
+            'email': user_profile.email.data,
+            'date_of_birth': user_profile.date_of_birth.data
+        }
+        cur_user.update_bio(updated_data)
+        return redirect(url_for('home.home_page'))
 
-@user_bp.route("/user/profile", methods=["POST", "GET"])
-# @user_bp.route("/user/profile/post-created", methods=["POST", "GET"])
+@user_bp.route("/user/profile", methods=["GET"])
 @login_required
 def view_user_profile():
+    '''
+    This view handles operations for users to view their profiles, update information etc.
+    '''
     user_profile = ViewUserProfileForm()
-    if request.method == 'POST':
-        pass
     if request.method == "GET":
         my_blogs = Post.query.filter_by(creator_id=current_user.id).all()
         favourite = Bookmarks.query.filter_by(liker_id=current_user.id).all()
@@ -266,23 +278,13 @@ def view_user_profile():
             # fav_post = bookmarked_post
             )
             
-
-        # json_ones = jsonify({'user_profile': user_profile, 'team':team, 'sport': sport})
         
-
-
-# I want user to update their bio information.
-@user_bp.route("/user/update-profile", methods=["POST", "GET"])
-@login_required
-def update_my_bio():
-    pass
-
-
 # implementing forgot password mechanism.
 @user_bp.route("/user/check-email", methods=["GET", "POST"])
 def ask_for_email_page():
     """
-    This route, checks user by email, if the user is found, redirects to forgot_password_page.
+    This route, checks user by email, if the user is found, we redirect the user to a
+    forgot_password_page.
 
     """
     check_email = CheckEmailForm()
@@ -324,3 +326,5 @@ def forgot_password_page(user_email):
             category="success",
         )
         return redirect(url_for("user.login_page"))
+
+    

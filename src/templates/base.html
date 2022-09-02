@@ -111,9 +111,9 @@
         {% if messages %}
         {% for category, message in messages %}
         <div aria-live="polite" aria-atomic="true" role="alert">
-            <div class="toast-container position-absolute p-3 bottom-0 end-0" id="toastPlacement">
+            <div class="toast-container position-absolute  p-3 top-50 start-50 translate-middle-x" id="toastPlacement">
                 <div class="toast align-items-center show alert-{{category}}">
-                    <div class="d-flex">
+                    <div class="d-flex ">
                         <div class="toast-body">
                             {{ message }}
                         </div>

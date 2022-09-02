@@ -28,8 +28,21 @@ def load_user(user_id):
 
 
 class User(schemas.User, UserMixin):
+
     def get_user_profile(self):
         pass
+
+    def update_bio(self, data):
+        '''
+        Updates user profile: 
+        '''
+        self.username = data['username']
+        self.date_of_birth = data['date_of_birth']
+        self.first_name = data['first_name']
+        self.last_name = data['last_name']
+        self.email = data['email']
+        db.session.commit()
+        
     def reset_password(self, new_password):
         self.password_hash = bcrypt.generate_password_hash(new_password).decode("utf-8")
         db.session.commit()
@@ -47,5 +60,8 @@ class User(schemas.User, UserMixin):
 
     @classmethod
     def find_user_by_email(cls, email):
+        '''
+        finds user in the database by email.
+        '''
         return cls.query.filter_by(email=email).first()
     

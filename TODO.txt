@@ -1,0 +1,4 @@
+TEAM PROFILE
+-----
+Update team schemas; images, include contact, mission, address, email, phone number etc
+Implement team description page to dsiplay all the information regarding the team. 
